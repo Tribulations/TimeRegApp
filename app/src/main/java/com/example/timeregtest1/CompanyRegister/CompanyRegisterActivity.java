@@ -1,6 +1,7 @@
 package com.example.timeregtest1.CompanyRegister;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.timeregtest1.CompanyAdapter;
@@ -28,6 +31,7 @@ import com.example.timeregtest1.RegisteredDatesActivity;
 import com.example.timeregtest1.TimeRegister.TimeRegisterActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,13 +60,14 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
     private BottomNavigationView bottomNavigationView;
 
     private Button btnAddCompany;
-    private Button tempBtn;
     private EditText edtTxtAddCompany;
 
     private ArrayList<Company> allCompanies = new ArrayList<>();
     private LiveData<List<Company>> allCompaniesLiveData;
 
     private CompanyAdapter companyAdapter;
+
+    private RelativeLayout parentRelLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,7 +79,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
         bottomNavigationView = findViewById(R.id.bottomNavView);
         btnAddCompany = findViewById(R.id.btnAddCompany);
         edtTxtAddCompany = findViewById(R.id.edtTxtAddCompany);
-        tempBtn = findViewById(R.id.tempBtn);
+        parentRelLayout = findViewById(R.id.parentRelLayout);
 
         initBottomNavView();
 
@@ -103,11 +108,55 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
             @Override
             public void onClick(View v)
             {
-                String companyToAdd = edtTxtAddCompany.getText().toString();
-                Runnable r2 = new InsertSingleCompanyThread(companyToAdd);
-                //Thread t = new Thread(new InsertSingleCompanyThread(companyToAdd));
-                Thread t = new Thread(r2);
-                t.start();
+                if(edtTxtAddCompany.getText().toString().equals(""))
+                {
+                    Toast.makeText(CompanyRegisterActivity.this, "Du måste skriva in företagets namn i fältet innan du klickar på lägg till", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Snackbar snackbar = Snackbar.make(parentRelLayout, "Vill du lägga till företag " + edtTxtAddCompany.getText().toString() + "?", Snackbar.LENGTH_INDEFINITE);
+                    snackbar.show();
+
+                    AlertDialog.Builder addCompanyDialog = new AlertDialog.Builder(CompanyRegisterActivity.this)
+                            .setTitle("Lägga till företag?")
+                            .setPositiveButton("Ja", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    String companyToAdd = edtTxtAddCompany.getText().toString();
+                                    Thread t = new Thread(new InsertSingleCompanyThread(companyToAdd));
+                                    t.start();
+
+                                    edtTxtAddCompany.setText("");
+
+                                    if(edtTxtAddCompany.isFocused())
+                                    {
+                                        edtTxtAddCompany.clearFocus();
+                                    }
+
+                                    snackbar.dismiss();
+                                }
+                            })
+                            .setNegativeButton("Nej", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which)
+                                {
+                                    snackbar.dismiss();
+                                }
+                            })
+                            .setOnDismissListener(new DialogInterface.OnDismissListener()
+                            {
+                                @Override
+                                public void onDismiss(DialogInterface dialog)
+                                {
+                                    snackbar.dismiss();
+                                }
+                            });
+
+                    addCompanyDialog.show();
+                }
             }
         });
 
@@ -136,17 +185,6 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
 
         });
 
-        tempBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(CompanyRegisterActivity.this, RegisteredDatesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
     }
 
     private void initBottomNavView()
@@ -170,7 +208,8 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
                         startActivity(mainIntent);
                         break;
                     case R.id.register:
-                        // what will this one do? hahaa remove?
+                        Toast.makeText(CompanyRegisterActivity.this,
+                                "Du måste först gå till kalendern och välja ett datum innan du kan registrera nya tider", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
