@@ -71,6 +71,7 @@ public class EditDialog extends DialogFragment
                 {
                     editDialogClicked = (EditDialogClicked) getContext();
                     editDialogClicked.onDelete();
+                    dismiss();
                 }
                 catch (ClassCastException e)
                 {

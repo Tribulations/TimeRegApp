@@ -53,6 +53,8 @@ import com.example.timeregtest1.R;
 import com.example.timeregtest1.selectedDate.DateRegsAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,7 +83,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     private Company companyById = new Company("default");
 
     // used to keep track of when the user wants to update or delete a datereg post
-    private boolean isRename = false, isDelete = false;
+    private boolean isRename = false;
 
     // set the edittext text to the company name that is clicked in the recview
     @Override
@@ -142,7 +144,31 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     @Override
     public void onDelete()
     {
-        isDelete = true;
+        Snackbar snackbar = Snackbar.make(timeRegConLayout, "Vill du ta bort post: " + companyName + " " + String.valueOf(timeWorked) + " tim?", Snackbar.LENGTH_INDEFINITE);
+        snackbar.show();
+
+
+        AlertDialog.Builder deleteDialog = new AlertDialog.Builder(TimeRegisterActivity.this)
+                .setTitle("Ta bort post?")
+                .setPositiveButton("Ja", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        Thread deleteThread = new Thread(new DeleteDateRegThread(dateRegId));
+                        deleteThread.start();
+                        snackbar.dismiss();
+                    }
+                })
+                .setNegativeButton("Nej", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        snackbar.dismiss();
+                    }
+                });
+        deleteDialog.show();
     }
 
     private ScrollView timeRegScrollView;
@@ -954,6 +980,22 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
         public void run()
         {
             CompanyDatabase.getInstance(TimeRegisterActivity.this).dateRegDao().updateDateReg(companyName, timeWorked, id, companyId);
+        }
+    }
+
+    public class DeleteDateRegThread implements Runnable
+    {
+        private int id;
+
+        public DeleteDateRegThread(int id)
+        {
+            this.id = id;
+        }
+
+        @Override
+        public void run()
+        {
+            CompanyDatabase.getInstance(TimeRegisterActivity.this).dateRegDao().deleteDateReg(id);
         }
     }
 
