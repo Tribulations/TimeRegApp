@@ -57,7 +57,6 @@ public class EditDialog extends DialogFragment
                 catch (ClassCastException e)
                 {
                     e.printStackTrace();
-
                 }
 
             }
