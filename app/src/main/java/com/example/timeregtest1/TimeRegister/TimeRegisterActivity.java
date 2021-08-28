@@ -116,11 +116,13 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     public void onDateRegClick(int id, String companyN, float timeW, int cId)
     {
         dateRegId = id;
+        Toast.makeText(this, "Id:" + String.valueOf(id), Toast.LENGTH_SHORT).show();
         companyName = companyN;
         timeWorked = timeW;
         companyId = cId;
 
         EditDialog editDialog = new EditDialog();
+        editDialog.show(getSupportFragmentManager(), "Ändra något?");
 
     }
 
@@ -129,6 +131,11 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     public void onRename()
     {
         isRename = true;
+
+        Toast.makeText(this, "Ändra posten och tryck på lägga till knappen igen", Toast.LENGTH_SHORT).show();
+
+        edtTxtCompany.setText(formatCompanyName(companyName));
+        edtTxtTime.setText(String.valueOf(timeWorked));
     }
 
     // edit dialog
@@ -253,13 +260,40 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                 if(isRename)
                 {
 
-                    edtTxtCompany.setText(companyName);
-                    edtTxtTime.setText(String.valueOf(timeWorked));
 
-                    Toast.makeText(this, "Ändra posten och tryck på lägga till knappen igen", Toast.LENGTH_SHORT).show();
+                    Thread getCompanyThread = new Thread(new GetCompanyByIdThread(companyId));
+                    getCompanyThread.start();
 
-                    Thread t = new Thread(new UpdateDateRegThread(companyName, timeWorked, dateRegId ,companyId));
+                    while (getCompanyThread.isAlive())
+                    {
+                        SystemClock.sleep(10);
+                    }
+
+                    Thread t = new Thread(new UpdateDateRegThread(companyById.getCompanyName(), Float.valueOf(edtTxtTime.getText().toString()), dateRegId ,companyId));
                     t.start();
+
+                    while(t.isAlive())
+                    {
+                        SystemClock.sleep(10);
+                    }
+
+                    Toast.makeText(this, "Posten ändrad", Toast.LENGTH_SHORT).show();
+
+                    edtTxtCompany.setText("");
+                    edtTxtTime.setText("");
+                    if(edtTxtCompany.isFocused())
+                    {
+                        edtTxtCompany.clearFocus();
+                    }
+                    if(edtTxtTime.isFocused())
+                    {
+                        edtTxtTime.clearFocus();
+                    }
+
+                    chooseCompanyRecView.setVisibility(View.GONE);
+                    frameLayoutRelView.setVisibility(View.VISIBLE);
+
+                    isRename = false;
                 }
                 else
                 {

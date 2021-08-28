@@ -66,7 +66,7 @@ public class CompanyInfoActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putString(COMPANY_NAME_KEY, companyName);
                 editCompanyDialog.setArguments(bundle);
-                editCompanyDialog.show(getSupportFragmentManager(), "Edit company");
+                editCompanyDialog.show(getSupportFragmentManager(), "Ändra företagsnamn eller ta bort?");
 
                 return true;
             }

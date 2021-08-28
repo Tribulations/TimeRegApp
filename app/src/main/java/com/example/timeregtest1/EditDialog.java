@@ -52,6 +52,7 @@ public class EditDialog extends DialogFragment
                 {
                     editDialogClicked = (EditDialogClicked) getContext();
                     editDialogClicked.onRename();
+                    dismiss();
                 }
                 catch (ClassCastException e)
                 {
