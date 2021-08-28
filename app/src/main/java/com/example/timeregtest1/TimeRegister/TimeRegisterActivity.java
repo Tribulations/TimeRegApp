@@ -267,6 +267,12 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                     }
 
                     Toast.makeText(this, "Tid tillagd!", Toast.LENGTH_SHORT).show();
+
+                    // clear the fields
+                    edtTxtCompany.setText("");
+                    edtTxtTime.setText("");
+                    frameLayoutRelView.setVisibility(View.VISIBLE);
+                    chooseCompanyRecView.setVisibility(View.GONE);
                 }
 
                 break;
