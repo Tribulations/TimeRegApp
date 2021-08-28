@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.timeregtest1.CompanyDatabase.Company;
@@ -60,6 +61,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private EditText edtTxtNameToSearch;
 
+    private TextView txtSumTimeWorked;
+
     private RegDatesAdapter dateRegsAdapter;
     private CompanyAdapter companyAdapter;
 
@@ -69,6 +72,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
     private int sYear, sMonth, sDay, eYear, eMonth, eDay;
 
     private int companyId = -1;
+
+    private float timeWorkedSum = 0.0f;
 
 
     // check how the lifecycle of this activity behaves when the dateRangepicker is closed or saved/ on positive. The two recviews are overlapping eachother
@@ -479,6 +484,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             }
         });
 
+        txtSumTimeWorked.setText(String.valueOf(txtSumTimeWorked));
 
 
 
@@ -494,6 +500,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         edtTxtNameToSearch = findViewById(R.id.edtTxtNameToSearch);
 
         conLayout = findViewById(R.id.conLayout);
+
+        txtSumTimeWorked = findViewById(R.id.txtSumTimeWorked);
     }
 
     private void initSearch(EditText editText)
@@ -602,6 +610,14 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     }*/
 
+    private void calcSumTimeWorked()
+    {
+        for(DateReg d : allDateRegs)
+        {
+            timeWorkedSum += d.getTimeWorked();
+        }
+    }
+
     public class GetAllDateRegsInPeriodThread implements Runnable
     {
         private static final String TAG = "GetAllDateRegsInPeriodThread";
@@ -681,4 +697,5 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         }
 
     }
+
 }

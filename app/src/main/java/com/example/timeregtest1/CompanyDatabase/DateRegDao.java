@@ -39,4 +39,5 @@ public interface DateRegDao
 
     @Query("DELETE FROM date_registrations WHERE id = :id")
     void deleteDateReg(int id);
+
 }
