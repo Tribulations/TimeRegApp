@@ -61,7 +61,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
     private RecyclerView companiesRecView;
     private BottomNavigationView bottomNavigationView;
 
-    private Button btnAddCompany;
+    private Button btnAddCompany, btnPeriod;
     private EditText edtTxtAddCompany;
 
     private ArrayList<Company> allCompanies = new ArrayList<>();
@@ -82,6 +82,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
         btnAddCompany = findViewById(R.id.btnAddCompany);
         edtTxtAddCompany = findViewById(R.id.edtTxtAddCompany);
         parentRelLayout = findViewById(R.id.parentRelLayout);
+        btnPeriod = findViewById(R.id.btnPeriod);
 
         initBottomNavView();
 
@@ -159,6 +160,16 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
 
                     addCompanyDialog.show();
                 }
+            }
+        });
+
+        btnPeriod.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(CompanyRegisterActivity.this, RegisteredDatesActivity.class);
+                startActivity(intent);
             }
         });
 

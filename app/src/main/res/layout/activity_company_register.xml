@@ -75,5 +75,17 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"/>
 
+    <Button
+        android:id="@+id/btnPeriod"
+        android:layout_width="wrap_content"
+        android:layout_height="39dp"
+        android:text="Period"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/edtTxtAddCompany"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:textAllCaps="false"/>
+
 
 </RelativeLayout>
