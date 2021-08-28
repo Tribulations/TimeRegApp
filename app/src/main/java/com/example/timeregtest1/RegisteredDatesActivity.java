@@ -233,6 +233,11 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                     {
                                         dateRegsAdapter.setAllDateRegs(allDateRegs);
                                         dateRegsRecView.setVisibility(View.VISIBLE);
+
+                                        timeWorkedSum = 0.0f;
+                                        calcSumTimeWorked();
+
+                                        txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
                                     }
                                     else
                                     {
@@ -244,6 +249,12 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
 
                             chooseCompanyRecView.setVisibility(View.GONE);
+
+                            timeWorkedSum = 0.0f;
+                            calcSumTimeWorked();
+
+
+                            txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
 
                         /*if(allDateRegs != null && allDateRegs.size() > 0)
                         {
@@ -380,6 +391,11 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                 {
                                     dateRegsAdapter.setAllDateRegs(allDateRegs);
                                     dateRegsRecView.setVisibility(View.VISIBLE);
+
+                                    timeWorkedSum = 0.0f;
+                                    calcSumTimeWorked();
+
+                                    txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
                                 }
                                 else
                                 {
@@ -390,6 +406,12 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         });
 
                         chooseCompanyRecView.setVisibility(View.GONE);
+
+
+                        timeWorkedSum = 0.0f;
+                        calcSumTimeWorked();
+
+                        txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
 
 
                         /*if(allDateRegs != null && allDateRegs.size() > 0)
@@ -483,10 +505,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 chooseCompanyRecView.setVisibility(View.GONE);
             }
         });
-
-        txtSumTimeWorked.setText(String.valueOf(txtSumTimeWorked));
-
-
 
 
     }
