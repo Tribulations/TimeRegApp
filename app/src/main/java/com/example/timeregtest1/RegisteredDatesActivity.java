@@ -172,18 +172,24 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             @Override
             public void onClick(View v)
             {
-                MaterialDatePicker rangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                        .setTitleText("Välj tidsperiod")
-                        .build();
-
-                rangePicker.show(getSupportFragmentManager(), "tag");
-
-                rangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>()
+                if(edtTxtNameToSearch.getText().toString().equals(""))
                 {
-                    @Override
-                    public void onPositiveButtonClick(Pair<Long, Long> selection)
+                    Toast.makeText(RegisteredDatesActivity.this, "Du behöver välja kund innan du klickar på knappen", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    MaterialDatePicker rangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                            .setTitleText("Välj tidsperiod")
+                            .build();
+
+                    rangePicker.show(getSupportFragmentManager(), "tag");
+
+                    rangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>()
                     {
-                        // remove these variables? Only need to use the arguments of this method?
+                        @Override
+                        public void onPositiveButtonClick(Pair<Long, Long> selection)
+                        {
+                            // remove these variables? Only need to use the arguments of this method?
                         /*Calendar startDate = Calendar.getInstance();
                         Calendar endDate = Calendar.getInstance();
                         startDate.setTimeInMillis(selection.first);
@@ -200,39 +206,39 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         eMonth++;
                         eDay = endDate.get(Calendar.DAY_OF_MONTH);*/
 
-                        Thread thread = new Thread(new GetAllDateRegsInPeriodByCompanyIdThread(selection.first, selection.second, companyId));
-                        thread.start();
+                            Thread thread = new Thread(new GetAllDateRegsInPeriodByCompanyIdThread(selection.first, selection.second, companyId));
+                            thread.start();
 
                         /*while(thread.isAlive())
                         {
                             SystemClock.sleep(10);
                         }*/
 
-                        // TODO: 2021-08-20 Use live data instead of this!
-                        allDateRegsLiveData = CompanyDatabase.getInstance(RegisteredDatesActivity.this).dateRegDao().getAllDateRegsInPeriodByCompanyIdLiveData(selection.first, selection.second, companyId);
-                        allDateRegsLiveData.observe(RegisteredDatesActivity.this, new Observer<List<DateReg>>()
-                        {
-                            @Override
-                            public void onChanged(List<DateReg> dateRegs)
+                            // TODO: 2021-08-20 Use live data instead of this!
+                            allDateRegsLiveData = CompanyDatabase.getInstance(RegisteredDatesActivity.this).dateRegDao().getAllDateRegsInPeriodByCompanyIdLiveData(selection.first, selection.second, companyId);
+                            allDateRegsLiveData.observe(RegisteredDatesActivity.this, new Observer<List<DateReg>>()
                             {
-                                Thread thread = new Thread(new GetAllDateRegsInPeriodThread(selection.first, selection.second));
-                                thread.start();
-
-                                if(allDateRegs != null && allDateRegs.size() > 0)
+                                @Override
+                                public void onChanged(List<DateReg> dateRegs)
                                 {
-                                    dateRegsAdapter.setAllDateRegs(allDateRegs);
-                                    dateRegsRecView.setVisibility(View.VISIBLE);
+                                    Thread thread = new Thread(new GetAllDateRegsInPeriodThread(selection.first, selection.second));
+                                    thread.start();
+
+                                    if(allDateRegs != null && allDateRegs.size() > 0)
+                                    {
+                                        dateRegsAdapter.setAllDateRegs(allDateRegs);
+                                        dateRegsRecView.setVisibility(View.VISIBLE);
+                                    }
+                                    else
+                                    {
+                                        dateRegsRecView.setVisibility(View.GONE);
+                                        Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                                else
-                                {
-                                    dateRegsRecView.setVisibility(View.GONE);
-                                    Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                            });
 
 
-                        chooseCompanyRecView.setVisibility(View.GONE);
+                            chooseCompanyRecView.setVisibility(View.GONE);
 
                         /*if(allDateRegs != null && allDateRegs.size() > 0)
                         {
@@ -308,8 +314,9 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                 dateRegsAdapter.setAllDateRegs(allDateRegs);
                             }
                         }*/
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
 
     private Bundle bundle = new Bundle();
 
+    private Calendar today = Calendar.getInstance();
 
 
 
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        Calendar today = Calendar.getInstance();
+
         y = today.get(Calendar.YEAR);
         m = today.get(Calendar.MONTH);
         d = today.get(Calendar.DAY_OF_MONTH);
@@ -99,14 +101,18 @@ public class MainActivity extends AppCompatActivity
                 dateSelectIntent.putExtra(CURRENT_DAY_KEY, dayOfMonth);
                 startActivity(dateSelectIntent);*/
 
+                // not allow to register on a date in the future
+
                 y = year;
                 m = month;
                 d = dayOfMonth;
 
+                initFragmentTransaction(year, month, dayOfMonth);
+
                 //Show fragment with registered data of the selected date
 
                 // run the code below in method
-                initFragmentTransaction(y, m, d);
+
 
                 /*bundle.putInt(CURRENT_YEAR_KEY, y);
                 bundle.putInt(CURRENT_MONTH_KEY, m);
@@ -159,11 +165,20 @@ public class MainActivity extends AppCompatActivity
                         // nothing needed here?
                         break;
                     case R.id.register:
-                        Intent dateSelectIntent = new Intent(MainActivity.this, TimeRegisterActivity.class);
-                        dateSelectIntent.putExtra(CURRENT_YEAR_KEY, y);
-                        dateSelectIntent.putExtra(CURRENT_MONTH_KEY, m);
-                        dateSelectIntent.putExtra(CURRENT_DAY_KEY, d);
-                        startActivity(dateSelectIntent);
+
+                        if(!dateAllowed(today, y, m, d))
+                        {
+                            Toast.makeText(MainActivity.this, "Du kan inte registrera på ett datum i framtiden", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Intent dateSelectIntent = new Intent(MainActivity.this, TimeRegisterActivity.class);
+                            dateSelectIntent.putExtra(CURRENT_YEAR_KEY, y);
+                            dateSelectIntent.putExtra(CURRENT_MONTH_KEY, m);
+                            dateSelectIntent.putExtra(CURRENT_DAY_KEY, d);
+                            startActivity(dateSelectIntent);
+                        }
+
                         break;
                     default:
                         break;
@@ -172,6 +187,20 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+    }
+
+    private boolean dateAllowed(Calendar today, int year, int month, int day)
+    {
+        Calendar c = Calendar.getInstance();
+
+        c.set(year,month,day,12, 0, 0);
+
+        if(!(c.getTimeInMillis() > today.getTimeInMillis()))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /*public class GetAllDateRegsThread implements Runnable
