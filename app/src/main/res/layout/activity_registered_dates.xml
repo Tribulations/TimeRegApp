@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisteredDatesActivity"
+    android:id="@+id/conLayout">
+
+    <Button
+        android:id="@+id/btnSelectPeriod"
+        android:layout_width="97dp"
+        android:layout_height="42dp"
+        android:text="Period"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <Button
+        android:id="@+id/btnCompanyNameToSearch"
+        android:layout_width="97dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Namn"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edtTxtNameToSearch"
+        android:layout_width="129dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Företagsnamn"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/btnCompanyNameToSearch"
+        app:layout_constraintStart_toEndOf="@+id/btnSelectPeriod"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:paddingBottom="60dp"
+        android:id="@+id/dateRegsRecView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSelectPeriod"
+        app:layout_constraintVertical_bias="0.029"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:paddingBottom="60dp"
+        android:id="@+id/companyNameRecView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtTxtNameToSearch"
+        app:layout_constraintVertical_bias="0.01"
+        android:visibility="gone"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

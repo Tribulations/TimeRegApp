@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TimeRegister.TimeRegisterActivity"
+    android:id="@+id/timeRegConLayout">
+
+
+    <RelativeLayout
+        android:id="@+id/timeRegParentRelView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtSelectedDate">
+
+        <RelativeLayout
+            android:id="@+id/firstTimeRegRelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:padding="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
+
+                <EditText
+                    android:id="@+id/edtTxtCompany"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:hint="Välj företag"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/edtTxtTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/edtTxtCompany"
+                    android:layout_toRightOf="@+id/edtTxtCompany"
+                    android:hint="Arbetad tid"
+                    android:inputType="numberDecimal" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chooseCompayRecView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@id/timeRegParentRelView"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="65dp"/>
+
+    <!-- Try and use this imageView to add another input field -->
+
+    <ImageView
+        android:id="@+id/btnAddInputField"
+        android:layout_width="40dp"
+        android:layout_height="38dp"
+        android:layout_marginBottom="64dp"
+        android:src="@drawable/ic_add"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"/>
+
+    <TextView
+        android:id="@+id/txtSelectedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Date"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottomNavView"
+        app:menu="@menu/bottom_nav_menu"
+        android:layout_alignParentBottom="true"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="65dp"
+        android:paddingTop="15dp"
+        android:layout_below="@id/timeRegParentRelView"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/frameLayoutRelView">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeRegFrameLayout" />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

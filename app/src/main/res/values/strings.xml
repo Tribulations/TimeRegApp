@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TimeRegTest1</string>
+    <string name="app_name2">L8s Dok</string>
+    <string name="nav_drawer_item1">Period</string>
+    <string name="nav_drawer_item2">item2</string>
+    <string name="nav_drawer_item3">item3</string>
+</resources>

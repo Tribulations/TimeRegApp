@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtCompanyNameCIF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="16dp"
+        android:text="Company Name:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtInfoCIF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="12dp"
+        android:text="Info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCompanyNameCIF" />
+
+    <ScrollView
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtInfoCIF">
+
+        <TextView
+            android:id="@+id/txtTimeRegistered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Massa olika datum reggade på detta frg listas här i denna scrollview? \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5 \ndatum: 2021-05-06 | tid arbetad: 5" />
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
