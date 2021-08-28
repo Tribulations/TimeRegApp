@@ -18,6 +18,21 @@ public class DateRegsAdapter extends RecyclerView.Adapter<DateRegsAdapter.ViewHo
 {
     private ArrayList<DateReg> allDateRegs = new ArrayList<>();
 
+    private Context context;
+
+    public DateRegsAdapter(Context context)
+    {
+        this.context = context;
+    }
+
+    // interface to get the DateReg id
+    public interface DateRegClicked
+    {
+        void onDateRegClick(int id, String companyN, float timeW, int cId);
+    }
+
+    private DateRegClicked dateRegClicked;
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
@@ -40,6 +55,27 @@ public class DateRegsAdapter extends RecyclerView.Adapter<DateRegsAdapter.ViewHo
 
         holder.txtCompanyName.setText(shortName);
         holder.txtTimeWorked.setText(String.valueOf(allDateRegs.get(position).getTimeWorked()));
+
+        holder.txtCompanyName.setOnLongClickListener(new View.OnLongClickListener()
+        {
+            @Override
+            public boolean onLongClick(View v)
+            {
+                try
+                {
+                    dateRegClicked = (DateRegClicked) context;
+                    dateRegClicked.onDateRegClick(allDateRegs.get(position).getId(),
+                            allDateRegs.get(position).getCompanyName(), allDateRegs.get(position).getTimeWorked(),
+                            allDateRegs.get(position).getCompanyId());
+                }
+                catch (ClassCastException e)
+                {
+                    e.printStackTrace();
+                }
+
+                return true;
+            }
+        });
     }
 
     @Override

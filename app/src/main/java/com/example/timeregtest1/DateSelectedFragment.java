@@ -73,7 +73,7 @@ public class DateSelectedFragment extends Fragment
 
 
 
-        dateRegsAdapter = new DateRegsAdapter();
+        dateRegsAdapter = new DateRegsAdapter(getActivity());
         dateRegRecView.setAdapter(dateRegsAdapter);
         dateRegRecView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
 

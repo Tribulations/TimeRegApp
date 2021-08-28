@@ -2,6 +2,7 @@ package com.example.timeregtest1.TimeRegister;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
@@ -13,6 +14,7 @@ import androidx.room.Database;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -45,8 +47,10 @@ import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
 import com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity;
 import com.example.timeregtest1.DateSelectedFragment;
+import com.example.timeregtest1.EditDialog;
 import com.example.timeregtest1.MainActivity;
 import com.example.timeregtest1.R;
+import com.example.timeregtest1.selectedDate.DateRegsAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -61,7 +65,7 @@ import static com.example.timeregtest1.selectedDate.DateSelectedActivity.SELECTE
 
 // trying to implement an interface to use callback to let this activity be notified when an company name in the recview has been clicked
 
-public class TimeRegisterActivity extends AppCompatActivity implements CompanyAdapter.CompanyNameClicked, View.OnClickListener
+public class TimeRegisterActivity extends AppCompatActivity implements CompanyAdapter.CompanyNameClicked, View.OnClickListener, DateRegsAdapter.DateRegClicked, EditDialog.EditDialogClicked
 {
     private static final String TAG = "TimeRegisterActivity";
 
@@ -70,9 +74,14 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
     // get the id of the companyname tha was clicked
     private int firstCompanyId = -1, secondCompanyId = -1, thirdCompanyId = -1;
-    private int companyId;
+    private int companyId = -1, dateRegId = -1;
+    private float timeWorked = 0f;
+    private String companyName = "";
     private int y = 0, m = 0, d = 0;
     private Company companyById = new Company("default");
+
+    // used to keep track of when the user wants to update or delete a datereg post
+    private boolean isRename = false, isDelete = false;
 
     // set the edittext text to the company name that is clicked in the recview
     @Override
@@ -101,6 +110,32 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
             chooseCompanyRecView.setVisibility(View.GONE);
             thirdCompanyId = id;
         }
+    }
+
+    @Override
+    public void onDateRegClick(int id, String companyN, float timeW, int cId)
+    {
+        dateRegId = id;
+        companyName = companyN;
+        timeWorked = timeW;
+        companyId = cId;
+
+        EditDialog editDialog = new EditDialog();
+
+    }
+
+    // edit dialog
+    @Override
+    public void onRename()
+    {
+        isRename = true;
+    }
+
+    // edit dialog
+    @Override
+    public void onDelete()
+    {
+        isDelete = true;
     }
 
     private ScrollView timeRegScrollView;
@@ -214,65 +249,91 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                 break;*/
             case R.id.btnAddInputField:// use this as save to database button?
                 // check if the inputted companies exist
-                if(edtTxtCompany.getText().toString().equals("") || edtTxtTime.getText().toString().equals(""))
+
+                if(isRename)
                 {
-                    Toast.makeText(this, "Fyll i företagets namn och tid innan du försöker lägga till en post!", Toast.LENGTH_SHORT).show();
+
+                    edtTxtCompany.setText(companyName);
+                    edtTxtTime.setText(String.valueOf(timeWorked));
+
+                    Toast.makeText(this, "Ändra posten och tryck på lägga till knappen igen", Toast.LENGTH_SHORT).show();
+
+                    Thread t = new Thread(new UpdateDateRegThread(companyName, timeWorked, dateRegId ,companyId));
+                    t.start();
                 }
                 else
                 {
-                    ArrayList<String> companyNames = new ArrayList<>();
-                    ArrayList<Float> companyHours = new ArrayList<>();
-                    companyNames.add(edtTxtCompany.getText().toString());
-                    companyHours.add(Float.valueOf(edtTxtTime.getText().toString()));
-
-                    // TODO: 2021-08-24  change this code for adding a company!!
-                    // ugly so change later
-                    ArrayList<Integer> ids = new ArrayList<>();
-                    if(firstCompanyId != -1)
+                    if(edtTxtCompany.getText().toString().equals("") || edtTxtTime.getText().toString().equals(""))
                     {
-                        ids.add(firstCompanyId);
+                        Toast.makeText(this, "Fyll i företagets namn och tid innan du försöker lägga till en post!", Toast.LENGTH_SHORT).show();
                     }
-
-                    int i = 0;
-                    for(String name : companyNames)
+                    else
                     {
+                        ArrayList<String> companyNames = new ArrayList<>();
+                        ArrayList<Float> companyHours = new ArrayList<>();
+                        companyNames.add(edtTxtCompany.getText().toString());
+                        companyHours.add(Float.valueOf(edtTxtTime.getText().toString()));
 
-                        if(!name.equals(""))
+                        // TODO: 2021-08-24  change this code for adding a company!!
+                        // ugly so change later
+                        ArrayList<Integer> ids = new ArrayList<>();
+                        if(firstCompanyId != -1)
                         {
-                            Thread t = new Thread(new GetCompanyByIdThread(ids.get(i))); // TODO: 2021-08-13 Maybe just add one company at a time in this activity? and when add button is clicked just clear the fields. and use a fragment to show whats already registered on the current date. which can be shown and hidden with a button click
-                            t.start();
-
-                            while(t.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            Calendar currentDate = Calendar.getInstance();
-                            currentDate.set(y, m, d, 12, 0, 0); // the month is counted from 0
-
-                            DateReg dateReg = new DateReg(y, m, d, companyById.getCompanyName(), companyHours.get(i), currentDate.getTimeInMillis(), companyId); // Adding m + 1to get the String type date in the DateRag class to display month correct. (month is counted from 0)
-
-                            // add company to database
-                            Thread t2 = new Thread(new InsertDateRegThread(dateReg));
-                            t2.start();
-
-                            // shouldnt need to wait like this but doing it know for safety?
-                            while(t2.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            i++;
+                            ids.add(firstCompanyId);
                         }
+
+                        int i = 0;
+                        for(String name : companyNames)
+                        {
+
+                            if(!name.equals(""))
+                            {
+                                Thread t2 = new Thread(new GetCompanyByIdThread(ids.get(i))); // TODO: 2021-08-13 Maybe just add one company at a time in this activity? and when add button is clicked just clear the fields. and use a fragment to show whats already registered on the current date. which can be shown and hidden with a button click
+                                t2.start();
+
+                                while(t2.isAlive())
+                                {
+                                    SystemClock.sleep(10);
+                                }
+
+                                Calendar currentDate = Calendar.getInstance();
+                                currentDate.set(y, m, d, 12, 0, 0); // the month is counted from 0
+
+                                DateReg dateReg = new DateReg(y, m, d, companyById.getCompanyName(), companyHours.get(i), currentDate.getTimeInMillis(), companyId); // Adding m + 1to get the String type date in the DateRag class to display month correct. (month is counted from 0)
+
+                                // add company to database
+                                Thread t3 = new Thread(new InsertDateRegThread(dateReg));
+                                t3.start();
+
+                                // shouldnt need to wait like this but doing it know for safety?
+                                while(t3.isAlive())
+                                {
+                                    SystemClock.sleep(10);
+                                }
+
+                                i++;
+                            }
+                        }
+
+                        Toast.makeText(this, "Tid tillagd!", Toast.LENGTH_SHORT).show();
+
+                        // clear the fields
+                        edtTxtCompany.setText("");
+                        edtTxtTime.setText("");
+                        if(edtTxtTime.isFocused())
+                        {
+                            edtTxtTime.clearFocus();
+                        }
+
+                        if (edtTxtCompany.isFocused())
+                        {
+                            edtTxtCompany.clearFocus();
+                        }
+
+                        frameLayoutRelView.setVisibility(View.VISIBLE);
+                        chooseCompanyRecView.setVisibility(View.GONE);
+
                     }
-
-                    Toast.makeText(this, "Tid tillagd!", Toast.LENGTH_SHORT).show();
-
-                    // clear the fields
-                    edtTxtCompany.setText("");
-                    edtTxtTime.setText("");
-                    frameLayoutRelView.setVisibility(View.VISIBLE);
-                    chooseCompanyRecView.setVisibility(View.GONE);
                 }
 
                 break;
@@ -838,6 +899,27 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
             Log.d(TAG, "run: called");
 
             CompanyDatabase.getInstance(TimeRegisterActivity.this).dateRegDao().insert(dateReg);
+        }
+    }
+
+    public class UpdateDateRegThread implements Runnable
+    {
+        private String companyName;
+        private float timeWorked;
+        private int id, companyId;
+
+        public UpdateDateRegThread(String companyName, float timeWorked, int id, int companyId)
+        {
+            this.companyName = companyName;
+            this.timeWorked = timeWorked;
+            this.id = id;
+            this.companyId = companyId;
+        }
+
+        @Override
+        public void run()
+        {
+            CompanyDatabase.getInstance(TimeRegisterActivity.this).dateRegDao().updateDateReg(companyName, timeWorked, id, companyId);
         }
     }
 

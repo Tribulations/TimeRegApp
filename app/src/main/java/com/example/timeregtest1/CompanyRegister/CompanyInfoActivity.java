@@ -1,7 +1,6 @@
 package com.example.timeregtest1.CompanyRegister;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.timeregtest1.EditCompanyDialog;
+import com.example.timeregtest1.EditDialog;
 import com.example.timeregtest1.MainActivity;
 import com.example.timeregtest1.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -63,7 +62,7 @@ public class CompanyInfoActivity extends AppCompatActivity
             @Override
             public boolean onLongClick(View v)
             {
-                EditCompanyDialog editCompanyDialog = new EditCompanyDialog();
+                EditDialog editCompanyDialog = new EditDialog();
                 Bundle bundle = new Bundle();
                 bundle.putString(COMPANY_NAME_KEY, companyName);
                 editCompanyDialog.setArguments(bundle);

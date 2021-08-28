@@ -85,7 +85,7 @@ public class DateSelectedActivity extends AppCompatActivity
         }
 
         dateRegRecView = findViewById(R.id.dateRegRecView);
-        dateRegsAdapter = new DateRegsAdapter();
+        dateRegsAdapter = new DateRegsAdapter(this);
         dateRegRecView.setAdapter(dateRegsAdapter);
         dateRegRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
