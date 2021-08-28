@@ -36,4 +36,7 @@ public interface DateRegDao
 
     @Query("UPDATE date_registrations SET company_name = :newName, time_worked = :newTime, company_id = :companyId WHERE id = :id")
     void updateDateReg(String newName, float newTime, int id, int companyId);
+
+    @Query("DELETE FROM date_registrations WHERE id = :id")
+    void deleteDateReg(int id);
 }
