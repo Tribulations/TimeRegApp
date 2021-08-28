@@ -39,6 +39,7 @@ import java.util.List;
 public class CompanyRegisterActivity extends AppCompatActivity implements CompanyAdapter.CompanyNameClicked
 {
     public static final String COMPANY_NAME_KEY = "company_name";
+    public static final String COMPANY_ID_KEY = "company_id";
 
     private String mCompanyName;
 
@@ -53,6 +54,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
 
         Intent intent = new Intent(CompanyRegisterActivity.this, CompanyInfoActivity.class);
         intent.putExtra(COMPANY_NAME_KEY, companyName);
+        intent.putExtra(COMPANY_ID_KEY, id);
         startActivity(intent);
     }
 
@@ -181,7 +183,6 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
                 //companyAdapter.setAllCompanies(allCompanies);
                 companyAdapter.setAllCompanies((ArrayList<Company>) companies);
             }
-
 
         });
 

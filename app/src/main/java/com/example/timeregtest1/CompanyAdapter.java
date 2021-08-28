@@ -69,7 +69,7 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyH
                 intent.putExtra(REC_ITEM_CLICKED_KEY, recItemClicked);
                 context.startActivity(intent);*/
 
-                // get the company name that is clicked to the TimeRegisterActivity
+                // get the company name that is clicked
 
                 try
                 {
