@@ -193,14 +193,14 @@ public class MainActivity extends AppCompatActivity
     {
         Calendar c = Calendar.getInstance();
 
-        c.set(year,month,day,12, 0, 0);
+        c.set(year,month,day,0, 0, 0);
 
-        if(!(c.getTimeInMillis() > today.getTimeInMillis()))
+        if(c.getTimeInMillis() > today.getTimeInMillis())
         {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     /*public class GetAllDateRegsThread implements Runnable

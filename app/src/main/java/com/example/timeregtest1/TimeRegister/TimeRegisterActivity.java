@@ -118,7 +118,6 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     public void onDateRegClick(int id, String companyN, float timeW, int cId)
     {
         dateRegId = id;
-        Toast.makeText(this, "Id:" + String.valueOf(id), Toast.LENGTH_SHORT).show();
         companyName = companyN;
         timeWorked = timeW;
         companyId = cId;
