@@ -41,6 +41,7 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
         }
 
 
+
         holder.txtCompanyName.setText(shortName);
         holder.txtTimeWorked.setText(String.valueOf(allDateRegs.get(position).getTimeWorked()));
         /*holder.txtDate.setText(String.valueOf(allDateRegs.get(position).getYear()) + "-"
@@ -101,6 +102,27 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
         }
 
         return newDate;
+    }
+
+    private String formatCompanyName(String name)
+    {
+        int res = name.length() - 17;
+        if(res < 0) // the name has less then 17 letters
+        {
+            // add whitespace chars until name has 17 letters
+            res *= -1;
+            for(int i = 0; i < res; ++i)
+            {
+                name += " ";
+            }
+        }
+        else if(res > 0)
+        {
+            name = name.substring(0, 15);
+            name = name + ".";
+        }
+
+        return name;
     }
 
 }
