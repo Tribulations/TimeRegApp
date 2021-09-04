@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,15 +62,12 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private EditText edtTxtNameToSearch;
 
-    private TextView txtSumTimeWorked;
+    private TextView txtSumTimeWorked, txtDateInterval;
 
     private RegDatesAdapter dateRegsAdapter;
     private CompanyAdapter companyAdapter;
 
-    private ConstraintLayout conLayout;
-
-    // year month and day of the selected period
-    private int sYear, sMonth, sDay, eYear, eMonth, eDay;
+    private RelativeLayout relLayout;
 
     private int companyId = -1;
 
@@ -145,6 +143,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             {
                 dateRegsRecView.setVisibility(View.GONE);
                 txtSumTimeWorked.setVisibility(View.GONE);
+                txtDateInterval.setVisibility(View.GONE);
                 chooseCompanyRecView.setVisibility(View.VISIBLE);
             }
 
@@ -165,6 +164,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 chooseCompanyRecView.setVisibility(View.VISIBLE);
                 dateRegsRecView.setVisibility(View.GONE);
                 txtSumTimeWorked.setVisibility(View.GONE);
+                txtDateInterval.setVisibility(View.GONE);
             }
 
             @Override
@@ -196,22 +196,23 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         @Override
                         public void onPositiveButtonClick(Pair<Long, Long> selection)
                         {
-                            // remove these variables? Only need to use the arguments of this method?
-                        /*Calendar startDate = Calendar.getInstance();
-                        Calendar endDate = Calendar.getInstance();
-                        startDate.setTimeInMillis(selection.first);
-                        endDate.setTimeInMillis(selection.second);
-                        Date start = startDate.getTime();
-                        Date end = endDate.getTime();
 
-                        sYear = startDate.get(Calendar.YEAR);
-                        sMonth = startDate.get(Calendar.MONTH);
-                        sMonth++;
-                        sDay = startDate.get(Calendar.DAY_OF_MONTH);
-                        eYear = endDate.get(Calendar.YEAR);
-                        eMonth = endDate.get(Calendar.MONTH);
-                        eMonth++;
-                        eDay = endDate.get(Calendar.DAY_OF_MONTH);*/
+                            Calendar startDate = Calendar.getInstance();
+                            Calendar endDate = Calendar.getInstance();
+                            startDate.setTimeInMillis(selection.first);
+                            endDate.setTimeInMillis(selection.second);
+
+                            /*Date start = startDate.getTime();
+                            Date end = endDate.getTime();*/
+
+                            final int sYear, sMonth, sDay, eYear, eMonth, eDay;
+
+                            sYear = startDate.get(Calendar.YEAR);
+                            sMonth = startDate.get(Calendar.MONTH) + 1;
+                            sDay = startDate.get(Calendar.DAY_OF_MONTH);
+                            eYear = endDate.get(Calendar.YEAR);
+                            eMonth = endDate.get(Calendar.MONTH) + 1;
+                            eDay = endDate.get(Calendar.DAY_OF_MONTH);
 
                             Thread thread = new Thread(new GetAllDateRegsInPeriodByCompanyIdThread(selection.first, selection.second, companyId));
                             thread.start();
@@ -236,16 +237,19 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                         dateRegsAdapter.setAllDateRegs(allDateRegs);
                                         dateRegsRecView.setVisibility(View.VISIBLE);
                                         txtSumTimeWorked.setVisibility(View.VISIBLE);
+                                        txtDateInterval.setVisibility(View.VISIBLE);
 
                                         timeWorkedSum = 0.0f;
                                         calcSumTimeWorked();
 
                                         txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
+
                                     }
                                     else
                                     {
                                         dateRegsRecView.setVisibility(View.GONE);
                                         txtSumTimeWorked.setVisibility(View.GONE);
+                                        txtDateInterval.setVisibility(View.GONE);
                                         Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
                                     }
                                 }
@@ -259,6 +263,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
 
                             txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
+                            txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(sMonth) + "-" + String.valueOf(sDay) + "till " + String.valueOf(eYear) + "-" + String.valueOf(eMonth) + "-" + String.valueOf(eDay));
 
                         /*if(allDateRegs != null && allDateRegs.size() > 0)
                         {
@@ -356,22 +361,22 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                     @Override
                     public void onPositiveButtonClick(Pair<Long, Long> selection)
                     {
-                        // remove these variables? Only need to use the arguments of this method?
-                        /*Calendar startDate = Calendar.getInstance();
+                        Calendar startDate = Calendar.getInstance();
                         Calendar endDate = Calendar.getInstance();
                         startDate.setTimeInMillis(selection.first);
                         endDate.setTimeInMillis(selection.second);
-                        Date start = startDate.getTime();
-                        Date end = endDate.getTime();
+
+                            /*Date start = startDate.getTime();
+                            Date end = endDate.getTime();*/
+
+                        final int sYear, sMonth, sDay, eYear, eMonth, eDay;
 
                         sYear = startDate.get(Calendar.YEAR);
-                        sMonth = startDate.get(Calendar.MONTH);
-                        sMonth++;
+                        sMonth = startDate.get(Calendar.MONTH) + 1;
                         sDay = startDate.get(Calendar.DAY_OF_MONTH);
                         eYear = endDate.get(Calendar.YEAR);
-                        eMonth = endDate.get(Calendar.MONTH);
-                        eMonth++;
-                        eDay = endDate.get(Calendar.DAY_OF_MONTH);*/
+                        eMonth = endDate.get(Calendar.MONTH) + 1;
+                        eDay = endDate.get(Calendar.DAY_OF_MONTH);
 
                         Thread thread = new Thread(new GetAllDateRegsInPeriodThread(selection.first, selection.second));
                         thread.start();
@@ -396,6 +401,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                     dateRegsAdapter.setAllDateRegs(allDateRegs);
                                     dateRegsRecView.setVisibility(View.VISIBLE);
                                     txtSumTimeWorked.setVisibility(View.VISIBLE);
+                                    txtDateInterval.setVisibility(View.VISIBLE);
 
                                     timeWorkedSum = 0.0f;
                                     calcSumTimeWorked();
@@ -406,6 +412,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                 {
                                     dateRegsRecView.setVisibility(View.GONE);
                                     txtSumTimeWorked.setVisibility(View.GONE);
+                                    txtDateInterval.setVisibility(View.GONE);
                                     Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
                                 }
                             }
@@ -418,6 +425,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         calcSumTimeWorked();
 
                         txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
+                        txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(sMonth) + "-" + String.valueOf(sDay) + " till " + String.valueOf(eYear) + "-" + String.valueOf(eMonth) + "-" + String.valueOf(eDay));
 
 
                         /*if(allDateRegs != null && allDateRegs.size() > 0)
@@ -503,7 +511,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         dateRegsRecView.setAdapter(dateRegsAdapter);
         dateRegsRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-        conLayout.setOnClickListener(new View.OnClickListener()
+        relLayout.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -511,6 +519,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 chooseCompanyRecView.setVisibility(View.GONE);
                 dateRegsRecView.setVisibility(View.VISIBLE);
                 txtSumTimeWorked.setVisibility(View.VISIBLE);
+                txtDateInterval.setVisibility(View.VISIBLE);
             }
         });
 
@@ -525,9 +534,11 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         chooseCompanyRecView = findViewById(R.id.companyNameRecView);
         edtTxtNameToSearch = findViewById(R.id.edtTxtNameToSearch);
 
-        conLayout = findViewById(R.id.conLayout);
+        relLayout = findViewById(R.id.relLayout);
 
         txtSumTimeWorked = findViewById(R.id.txtSumTimeWorked);
+
+        txtDateInterval = findViewById(R.id.txtDateInterval);
     }
 
     private void initSearch(EditText editText)

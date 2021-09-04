@@ -1,36 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisteredDatesActivity"
-    android:id="@+id/conLayout">
+    tools:context=".RegisteredDatesActivity">
 
     <Button
         android:id="@+id/btnSelectPeriod"
         android:layout_width="97dp"
         android:layout_height="48dp"
+        android:layout_margin="16dp"
         android:text="Period"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"/>
 
     <Button
         android:id="@+id/btnCompanyNameToSearch"
         android:layout_width="97dp"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_margin="16sp"
         android:text="Namn"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
 
     <EditText
         android:id="@+id/edtTxtNameToSearch"
@@ -40,47 +35,61 @@
         android:ems="10"
         android:hint="Företagsnamn"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toStartOf="@+id/btnCompanyNameToSearch"
-        app:layout_constraintStart_toEndOf="@+id/btnSelectPeriod"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerHorizontal="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/periodRelLayout"
+        android:layout_below="@id/edtTxtNameToSearch">
+
+        <TextView
+            android:id="@+id/txtDateInterval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="hj"
+            android:visibility="visible" />
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:paddingBottom="60dp"
         android:id="@+id/dateRegsRecView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSelectPeriod"
-        app:layout_constraintVertical_bias="0.029"
-        android:visibility="gone"/>
+        android:paddingBottom="20dp"
+        android:visibility="gone"
+        android:layout_below="@id/periodRelLayout"
+        android:layout_centerHorizontal="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/companyNameRecView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="60dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/txtSumTimeWorked"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtTxtNameToSearch"
-        app:layout_constraintVertical_bias="0.062" />
+        android:paddingBottom="20dp"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/periodRelLayout"/>
 
-    <TextView
-        android:id="@+id/txtSumTimeWorked"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/totTimeRelLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Total time"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.954"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateRegsRecView"
-        app:layout_constraintVertical_bias="0.974" />
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/txtSumTimeWorked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"
+            android:text="" />
+
+    </RelativeLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>
