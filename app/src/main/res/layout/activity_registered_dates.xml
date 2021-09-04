@@ -49,7 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="5dp"
-            android:text="hj"
+            android:text=""
+            android:textStyle="bold"
             android:visibility="visible" />
 
     </RelativeLayout>
@@ -79,13 +80,23 @@
         android:layout_alignParentBottom="true">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTotalTime"
+            android:text="Tid i perioden:"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/txtSumTimeWorked"
+            android:layout_margin="5dp"/>
+
+        <TextView
             android:id="@+id/txtSumTimeWorked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
-            android:text="" />
+            android:text=""
+            android:textStyle="bold"/>
 
     </RelativeLayout>
 

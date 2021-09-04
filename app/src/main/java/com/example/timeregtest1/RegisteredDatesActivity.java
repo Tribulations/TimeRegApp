@@ -263,7 +263,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
 
                             txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
-                            txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(sMonth) + "-" + String.valueOf(sDay) + "till " + String.valueOf(eYear) + "-" + String.valueOf(eMonth) + "-" + String.valueOf(eDay));
+                            txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(formatDateInt(sMonth)) + "-" +
+                                    String.valueOf(formatDateInt(sDay)) + " till " + String.valueOf(eYear) + "-" + String.valueOf(formatDateInt(eMonth)) + "-" + String.valueOf(formatDateInt(eDay)));
 
                         /*if(allDateRegs != null && allDateRegs.size() > 0)
                         {
@@ -425,7 +426,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         calcSumTimeWorked();
 
                         txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
-                        txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(sMonth) + "-" + String.valueOf(sDay) + " till " + String.valueOf(eYear) + "-" + String.valueOf(eMonth) + "-" + String.valueOf(eDay));
+                        txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(formatDateInt(sMonth)) + "-" +
+                                String.valueOf(formatDateInt(sDay)) + " till " + String.valueOf(eYear) + "-" + String.valueOf(formatDateInt(eMonth)) + "-" + String.valueOf(formatDateInt(eDay)));
 
 
                         /*if(allDateRegs != null && allDateRegs.size() > 0)
@@ -652,6 +654,19 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         for(DateReg d : allDateRegs)
         {
             timeWorkedSum += d.getTimeWorked();
+        }
+    }
+
+    // add a zero (0) to the month and dayOfMonth when showing the date as a string
+    private String formatDateInt(int d)
+    {
+        if(d < 10)
+        {
+            return new String("0" + String.valueOf(d));
+        }
+        else
+        {
+            return String.valueOf(d);
         }
     }
 
