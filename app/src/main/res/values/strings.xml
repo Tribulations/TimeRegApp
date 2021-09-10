@@ -4,4 +4,7 @@
     <string name="nav_drawer_item1">Period</string>
     <string name="nav_drawer_item2">item2</string>
     <string name="nav_drawer_item3">item3</string>
+
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
 </resources>

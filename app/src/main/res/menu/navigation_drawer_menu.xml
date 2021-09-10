@@ -3,7 +3,7 @@
 
     <item
         android:title="@string/nav_drawer_item1"
-        android:id="@+id/nav_drawer_item1"
+        android:id="@+id/period"
         android:icon="@drawable/ic_nav_drawer_item1" />
 
     <item

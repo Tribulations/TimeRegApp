@@ -1,6 +1,7 @@
 package com.example.timeregtest1;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,7 +20,9 @@ import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
 import com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity;
 import com.example.timeregtest1.TimeRegister.TimeRegisterActivity;
+import com.example.timeregtest1.mainfragment.MainFragment;
 import com.example.timeregtest1.selectedDate.DateSelectedActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private MaterialToolbar toolbar;
 
     private ArrayList<DateReg> allDateRegs = new ArrayList<>();
 
@@ -58,135 +62,39 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calendarView = findViewById(R.id.calendarView);
-        bottomNavigationView = findViewById(R.id.bottomNavView);
-        /*mainActivityFragment = findViewById(R.id.mainFragmentLayout);*/
+        initViews();
 
-        // initial date of today. Used to show the date regs of the current date when first starting the app
+        // toggle for the navdrawer
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
-
-
-
-        y = today.get(Calendar.YEAR);
-        m = today.get(Calendar.MONTH);
-        d = today.get(Calendar.DAY_OF_MONTH);
-
-        /*Thread initialThread = new Thread(new GetAllDateRegsThread(y, m, d));
-        initialThread.start();
-
-        // remove this while and add LiveData instead
-
-        while(initialThread.isAlive())
-        {
-            SystemClock.sleep(10);
-        }
-*/
-        // show the data in the fragment
-
-
-        initFragmentTransaction(y, m, d);
-
-        /*FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainFragmentLayout, dateSelectedFragment);
-        transaction.commit();*/
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener()
-        {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
-            {
-                /*Intent dateSelectIntent = new Intent(MainActivity.this, DateSelectedActivity.class);
-                dateSelectIntent.putExtra(CURRENT_YEAR_KEY, year);
-                dateSelectIntent.putExtra(CURRENT_MONTH_KEY, month);
-                dateSelectIntent.putExtra(CURRENT_DAY_KEY, dayOfMonth);
-                startActivity(dateSelectIntent);*/
-
-                // not allow to register on a date in the future
-
-                y = year;
-                m = month;
-                d = dayOfMonth;
-
-                initFragmentTransaction(year, month, dayOfMonth);
-
-                //Show fragment with registered data of the selected date
-
-                // run the code below in method
-
-
-                /*bundle.putInt(CURRENT_YEAR_KEY, y);
-                bundle.putInt(CURRENT_MONTH_KEY, m);
-                bundle.putInt(CURRENT_DAY_KEY, d);
-                dateSelectedFragment.setArguments(bundle);
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.mainFragmentLayout, dateSelectedFragment);
-                transaction.commit();*/
-            }
-        });
-
-        initBottomNavView();
-
-
-
-    }
-
-    private void initFragmentTransaction(int y, int m, int d)
-    {
-        final DateSelectedFragment dateSelectedFragment = new DateSelectedFragment();
-
-        bundle.putInt(CURRENT_YEAR_KEY, y);
-        bundle.putInt(CURRENT_MONTH_KEY, m);
-        bundle.putInt(CURRENT_DAY_KEY, d);
-        dateSelectedFragment.setArguments(bundle);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainFragmentLayout, dateSelectedFragment);
-        transaction.commit();
-    }
-
-    private void initBottomNavView()
-    {
-        bottomNavigationView.setSelectedItemId(R.id.calendar);
-
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener()
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
         {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item)
             {
                 switch (item.getItemId())
                 {
-                    case R.id.companies:
-                        // TODO: 2021-08-09 Use livedata so that the list is filled dynamically if all companies haven't loaded from the database
-                        Intent companiesIntent = new Intent(MainActivity.this, CompanyRegisterActivity.class);
-                        startActivity(companiesIntent);
-                        break;
-                    case R.id.calendar:
-                        // nothing needed here?
-                        break;
-                    case R.id.register:
+                    case R.id.period:
 
-                        if(!dateAllowed(today, y, m, d))
-                        {
-                            Toast.makeText(MainActivity.this, "Du kan inte registrera på ett datum i framtiden", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            Intent dateSelectIntent = new Intent(MainActivity.this, TimeRegisterActivity.class);
-                            dateSelectIntent.putExtra(CURRENT_YEAR_KEY, y);
-                            dateSelectIntent.putExtra(CURRENT_MONTH_KEY, m);
-                            dateSelectIntent.putExtra(CURRENT_DAY_KEY, d);
-                            startActivity(dateSelectIntent);
-                        }
+                        break;
+                    case R.id.nav_drawer_item2:
 
                         break;
                     default:
                         break;
                 }
 
-                return true;
+                return false;
             }
         });
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frameLayoutContainer, new MainFragment());
+        transaction.commit();
+
     }
 
     private boolean dateAllowed(Calendar today, int year, int month, int day)
@@ -203,23 +111,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /*public class GetAllDateRegsThread implements Runnable
+    private void initViews()
     {
-        private static final String TAG = "GetAllDateRegsThread";
+        drawerLayout = findViewById(R.id.drawer);
+        navigationView = findViewById(R.id.navigationView);
+        toolbar = findViewById(R.id.toolbar);
 
-        private int mYear, mMonth, mDay;
+    }
 
-        public GetAllDateRegsThread(int mYear, int mMonth, int mDay)
-        {
-            this.mYear = mYear;
-            this.mMonth = mMonth;
-            this.mDay = mDay;
-        }
-
-        @Override
-        public void run()
-        {
-            allDateRegs = (ArrayList<DateReg>) CompanyDatabase.getInstance(MainActivity.this).dateRegDao().getSelectedDatesData(mYear, mMonth, mDay);
-        }
-    }*/
 }

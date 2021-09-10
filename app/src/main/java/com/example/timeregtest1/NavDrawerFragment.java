@@ -1,4 +1,4 @@
-/*package com.example.timeregtest1;
+package com.example.timeregtest1;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,11 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;*/
+import androidx.fragment.app.Fragment;
 
-/* Remove this file? */
-
-/*public class NavDrawerFragment extends Fragment
+public class NavDrawerFragment extends Fragment
 {
     @Nullable
     @Override
@@ -21,4 +19,4 @@ import androidx.fragment.app.Fragment;*/
 
         return view;
     }
-}*/
+}
