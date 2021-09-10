@@ -34,8 +34,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-// TODO: 2021-08-18 Let the user choose a time period and show all registrations
-
 public class RegisteredDatesActivity extends AppCompatActivity implements CompanyAdapter.CompanyNameClicked
 {
     @Override
@@ -73,37 +71,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private float timeWorkedSum = 0.0f;
 
-
-    // check how the lifecycle of this activity behaves when the dateRangepicker is closed or saved/ on positive. The two recviews are overlapping eachother
-    // TODO: 2021-08-20 see the above comment *******************************************
-    /*@Override
-    protected void onPostResume()
-    {
-        Log.d(TAG, "onPostResume: called");
-        super.onPostResume();
-    }
-
-    @Override
-    protected void onStart()
-    {
-        Log.d(TAG, "onStart: called");
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop()
-    {
-        Log.d(TAG, "onStop: called");
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        Log.d(TAG, "onDestroy: called");
-        super.onDestroy();
-    }*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -115,8 +82,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         companyAdapter = new CompanyAdapter(this);
         chooseCompanyRecView.setAdapter(companyAdapter);
         chooseCompanyRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-
-        // TODO: 2021-08-20 Make it possible to search dateregs of just one company
 
         Thread thread = new Thread(new GetAllCompaniesThread());
         thread.start();
@@ -217,12 +182,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                             Thread thread = new Thread(new GetAllDateRegsInPeriodByCompanyIdThread(selection.first, selection.second, companyId));
                             thread.start();
 
-                        /*while(thread.isAlive())
-                        {
-                            SystemClock.sleep(10);
-                        }*/
-
-                            // TODO: 2021-08-20 Use live data instead of this!
                             allDateRegsLiveData = CompanyDatabase.getInstance(RegisteredDatesActivity.this).dateRegDao().getAllDateRegsInPeriodByCompanyIdLiveData(selection.first, selection.second, companyId);
                             allDateRegsLiveData.observe(RegisteredDatesActivity.this, new Observer<List<DateReg>>()
                             {
@@ -265,81 +224,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                             txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
                             txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(formatDateInt(sMonth)) + "-" +
                                     String.valueOf(formatDateInt(sDay)) + " till " + String.valueOf(eYear) + "-" + String.valueOf(formatDateInt(eMonth)) + "-" + String.valueOf(formatDateInt(eDay)));
-
-                        /*if(allDateRegs != null && allDateRegs.size() > 0)
-                        {
-                            dateRegsAdapter.setAllDateRegs(allDateRegs);
-                        }
-                        else
-                        {
-                            Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet", Toast.LENGTH_LONG).show();
-                        }*/
-
-                        /*if(sYear == eYear && sMonth == eMonth)
-                        {
-                            // TODO: 2021-08-18  change to LiveData
-                            Thread t = new Thread(new GetAllDateRegsBySameYearAndMonthThread(sYear, sMonth, sDay, eDay));
-                            t.start();
-                            while(t.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            if(allDateRegs == null || allDateRegs.size() < 1)
-                            {
-                                // show nothing to show toast
-                                Toast.makeText(RegisteredDatesActivity.this, "Inget registrerat i den valda perioden/datumet.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                // TODO: 2021-08-18 gör ny dateregs adapoter för att visa en period av registreringar. den kan va typ som den andra datereg adaptern men även ha fält för datum och sortering efter datum
-                                dateRegsAdapter.setAllDateRegs(allDateRegs);
-                            }
-                        }
-                        else if(sYear == eYear && sDay < eDay)
-                        {
-                            Log.d(TAG, "onPositiveButtonClick: called inside else if(sDay < eDay)");
-                            // TODO: 2021-08-18  change to LiveData
-                            Thread t = new Thread(new GetAllDateRegsBySameYearSdayLEdayThread(sYear, sMonth, eMonth, sDay, eDay));
-                            t.start();
-                            while(t.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            if(allDateRegs == null || allDateRegs.size() < 1)
-                            {
-                                // show nothing to show toast
-                                Toast.makeText(RegisteredDatesActivity.this, "Inget registrerat i den valda perioden/datumet.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                // TODO: 2021-08-18 gör ny dateregs adapoter för att visa en period av registreringar. den kan va typ som den andra datereg adaptern men även ha fält för datum och sortering efter datum
-                                dateRegsAdapter.setAllDateRegs(allDateRegs);
-                            }
-                        }
-                        else if(sYear == eYear && sDay > eDay)
-                        {
-                            Log.d(TAG, "onPositiveButtonClick: called inside else if(sDay > eDay)");
-                            // TODO: 2021-08-18  change to LiveData
-                            Thread t = new Thread(new GetAllDateRegsBySameYearSdayGEdayThread(sYear, sMonth, eMonth, sDay, eDay));
-                            t.start();
-                            while(t.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            if(allDateRegs == null || allDateRegs.size() < 1)
-                            {
-                                // show nothing to show toast
-                                Toast.makeText(RegisteredDatesActivity.this, "Inget registrerat i den valda perioden/datumet.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                // TODO: 2021-08-18 gör ny dateregs adapoter för att visa en period av registreringar. den kan va typ som den andra datereg adaptern men även ha fält för datum och sortering efter datum
-                                dateRegsAdapter.setAllDateRegs(allDateRegs);
-                            }
-                        }*/
                         }
                     });
                 }
@@ -367,9 +251,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         startDate.setTimeInMillis(selection.first);
                         endDate.setTimeInMillis(selection.second);
 
-                            /*Date start = startDate.getTime();
-                            Date end = endDate.getTime();*/
-
                         final int sYear, sMonth, sDay, eYear, eMonth, eDay;
 
                         sYear = startDate.get(Calendar.YEAR);
@@ -382,12 +263,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         Thread thread = new Thread(new GetAllDateRegsInPeriodThread(selection.first, selection.second));
                         thread.start();
 
-                        /*while(thread.isAlive())
-                        {
-                            SystemClock.sleep(10);
-                        }*/
-
-                        // TODO: 2021-08-20 Use live data instead of this!
                         allDateRegsLiveData = CompanyDatabase.getInstance(RegisteredDatesActivity.this).dateRegDao().getAllDateRegsInPeriodLiveData(selection.first, selection.second);
                         allDateRegsLiveData.observe(RegisteredDatesActivity.this, new Observer<List<DateReg>>()
                         {
@@ -428,82 +303,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
                         txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(formatDateInt(sMonth)) + "-" +
                                 String.valueOf(formatDateInt(sDay)) + " till " + String.valueOf(eYear) + "-" + String.valueOf(formatDateInt(eMonth)) + "-" + String.valueOf(formatDateInt(eDay)));
-
-
-                        /*if(allDateRegs != null && allDateRegs.size() > 0)
-                        {
-                            dateRegsAdapter.setAllDateRegs(allDateRegs);
-                        }
-                        else
-                        {
-                            Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet", Toast.LENGTH_LONG).show();
-                        }*/
-
-                        /*if(sYear == eYear && sMonth == eMonth)
-                        {
-                            // TODO: 2021-08-18  change to LiveData
-                            Thread t = new Thread(new GetAllDateRegsBySameYearAndMonthThread(sYear, sMonth, sDay, eDay));
-                            t.start();
-                            while(t.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            if(allDateRegs == null || allDateRegs.size() < 1)
-                            {
-                                // show nothing to show toast
-                                Toast.makeText(RegisteredDatesActivity.this, "Inget registrerat i den valda perioden/datumet.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                // TODO: 2021-08-18 gör ny dateregs adapoter för att visa en period av registreringar. den kan va typ som den andra datereg adaptern men även ha fält för datum och sortering efter datum
-                                dateRegsAdapter.setAllDateRegs(allDateRegs);
-                            }
-                        }
-                        else if(sYear == eYear && sDay < eDay)
-                        {
-                            Log.d(TAG, "onPositiveButtonClick: called inside else if(sDay < eDay)");
-                            // TODO: 2021-08-18  change to LiveData
-                            Thread t = new Thread(new GetAllDateRegsBySameYearSdayLEdayThread(sYear, sMonth, eMonth, sDay, eDay));
-                            t.start();
-                            while(t.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            if(allDateRegs == null || allDateRegs.size() < 1)
-                            {
-                                // show nothing to show toast
-                                Toast.makeText(RegisteredDatesActivity.this, "Inget registrerat i den valda perioden/datumet.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                // TODO: 2021-08-18 gör ny dateregs adapoter för att visa en period av registreringar. den kan va typ som den andra datereg adaptern men även ha fält för datum och sortering efter datum
-                                dateRegsAdapter.setAllDateRegs(allDateRegs);
-                            }
-                        }
-                        else if(sYear == eYear && sDay > eDay)
-                        {
-                            Log.d(TAG, "onPositiveButtonClick: called inside else if(sDay > eDay)");
-                            // TODO: 2021-08-18  change to LiveData
-                            Thread t = new Thread(new GetAllDateRegsBySameYearSdayGEdayThread(sYear, sMonth, eMonth, sDay, eDay));
-                            t.start();
-                            while(t.isAlive())
-                            {
-                                SystemClock.sleep(10);
-                            }
-
-                            if(allDateRegs == null || allDateRegs.size() < 1)
-                            {
-                                // show nothing to show toast
-                                Toast.makeText(RegisteredDatesActivity.this, "Inget registrerat i den valda perioden/datumet.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                            {
-                                // TODO: 2021-08-18 gör ny dateregs adapoter för att visa en period av registreringar. den kan va typ som den andra datereg adaptern men även ha fält för datum och sortering efter datum
-                                dateRegsAdapter.setAllDateRegs(allDateRegs);
-                            }
-                        }*/
                     }
                 });
             }
@@ -581,73 +380,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
         return name;
     }
-
-    /*public class GetAllDateRegsBySameYearAndMonthThread implements Runnable
-    {
-        private int sYear, sMonth, sDay, eDay;
-
-        public GetAllDateRegsBySameYearAndMonthThread(int sYear, int sMonth, int sDay, int eDay)
-        {
-            this.sYear = sYear;
-            this.sMonth = sMonth;
-            this.sDay = sDay;
-            this.eDay = eDay;
-        }
-
-        @Override
-        public void run()
-        {
-            allDateRegs = (ArrayList<DateReg>) CompanyDatabase.getInstance(RegisteredDatesActivity.this)
-                    .dateRegDao().getAllDateRegsBySameYearAndMonth(sYear, sMonth, sDay, eDay);
-        }
-
-    }
-
-    public class GetAllDateRegsBySameYearSdayLEdayThread implements Runnable
-    {
-        private int sYear, sMonth, eMonth, sDay, eDay;
-
-
-        public GetAllDateRegsBySameYearSdayLEdayThread(int sYear, int sMonth, int eMonth, int sDay, int eDay)
-        {
-            this.sYear = sYear;
-            this.sMonth = sMonth;
-            this.eMonth = eMonth;
-            this.sDay = sDay;
-            this.eDay = eDay;
-        }
-
-        @Override
-        public void run()
-        {
-            allDateRegs = (ArrayList<DateReg>) CompanyDatabase.getInstance(RegisteredDatesActivity.this)
-                    .dateRegDao().getAllDateRegsBySameYearSdayLEday(sYear, sMonth, eMonth, sDay, eDay);
-        }
-
-    }
-
-    public class GetAllDateRegsBySameYearSdayGEdayThread implements Runnable
-    {
-        private int sYear, sMonth, eMonth, sDay, eDay;
-
-
-        public GetAllDateRegsBySameYearSdayGEdayThread(int sYear, int sMonth, int eMonth, int sDay, int eDay)
-        {
-            this.sYear = sYear;
-            this.sMonth = sMonth;
-            this.eMonth = eMonth;
-            this.sDay = sDay;
-            this.eDay = eDay;
-        }
-
-        @Override
-        public void run()
-        {
-            allDateRegs = (ArrayList<DateReg>) CompanyDatabase.getInstance(RegisteredDatesActivity.this)
-                    .dateRegDao().getAllDateRegsBySameYearSdayGEday(sYear, sMonth, eMonth, sDay, eDay);
-        }
-
-    }*/
 
     private void calcSumTimeWorked()
     {

@@ -211,9 +211,6 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
                 switch (item.getItemId())
                 {
                     case R.id.companies:
-                        // TODO: 2021-08-09 Use livedata so that the list is filled dynamically if all companies haven't loaded from the database
-                        /*Intent companiesIntent = new Intent(CompanyRegisterActivity.this, CompanyRegisterActivity.class);
-                        startActivity(companiesIntent);*/
                         break;
                     case R.id.calendar:
                         Intent mainIntent = new Intent(CompanyRegisterActivity.this, MainActivity.class);

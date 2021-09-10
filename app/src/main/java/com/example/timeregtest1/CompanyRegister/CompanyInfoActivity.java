@@ -163,7 +163,6 @@ public class CompanyInfoActivity extends AppCompatActivity implements EditDialog
                 switch (item.getItemId())
                 {
                     case R.id.companies:
-                        // TODO: 2021-08-09 Use livedata so that the list is filled dynamically if all companies haven't loaded from the database
                         Intent companiesIntent = new Intent(CompanyInfoActivity.this, CompanyRegisterActivity.class);
                         startActivity(companiesIntent);
                         break;
