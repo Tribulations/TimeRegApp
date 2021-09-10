@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:gravity="bottom"
     android:padding="10dp"
-    android:background="#0F97DB">
+    android:background="#98164C">
 
     <ImageView
         android:layout_width="70dp"
@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Jockes Mall"
+        android:text="Nån annan text ska va här"
         android:textStyle="bold"
         android:textColor="#FFF"
         android:layout_marginTop="10dp"/>
@@ -23,7 +23,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="meiCode.org"
+        android:text="L8sDok"
         android:textStyle="italic"
         android:textColor="#FFF"
         android:layout_marginBottom="10dp"

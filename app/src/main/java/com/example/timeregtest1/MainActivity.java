@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity
                 switch (item.getItemId())
                 {
                     case R.id.period:
-
+                        Intent intent = new Intent(MainActivity.this, RegisteredDatesActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.nav_drawer_item2:
 
