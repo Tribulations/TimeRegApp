@@ -1,5 +1,6 @@
 package com.example.timeregtest1;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.util.Pair;
@@ -9,11 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,10 +27,13 @@ import android.widget.Toast;
 import com.example.timeregtest1.CompanyDatabase.Company;
 import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
+import com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity;
 import com.example.timeregtest1.TimeRegister.TimeRegisterActivity;
 import com.example.timeregtest1.selectedDate.DateRegsAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,6 +77,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private float timeWorkedSum = 0.0f;
 
+    private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -78,6 +86,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         setContentView(R.layout.activity_registered_dates);
 
         initViews();
+
+        initBottomNavView();
 
         companyAdapter = new CompanyAdapter(this);
         chooseCompanyRecView.setAdapter(companyAdapter);
@@ -340,6 +350,40 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         txtSumTimeWorked = findViewById(R.id.txtSumTimeWorked);
 
         txtDateInterval = findViewById(R.id.txtDateInterval);
+
+        bottomNavigationView = findViewById(R.id.bottomNavView);
+    }
+
+    private void initBottomNavView()
+    {
+        bottomNavigationView.setSelectedItemId(R.id.companies);
+
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
+                switch (item.getItemId())
+                {
+                    case R.id.companies:
+                        Intent companiesIntent = new Intent(RegisteredDatesActivity.this, CompanyRegisterActivity.class);
+                        startActivity(companiesIntent);
+                        break;
+                    case R.id.calendar:
+                        Intent mainIntent = new Intent(RegisteredDatesActivity.this, MainActivity.class);
+                        startActivity(mainIntent);
+                        break;
+                    case R.id.register:
+                        Toast.makeText(RegisteredDatesActivity.this,
+                                "Du måste först gå till kalendern och välja ett datum innan du kan registrera nya tider", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+        });
     }
 
     private void initSearch(EditText editText)
