@@ -8,28 +8,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
-import com.example.timeregtest1.CompanyDatabase.DateReg;
-import com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity;
-import com.example.timeregtest1.TimeRegister.TimeRegisterActivity;
+import android.view.MenuItem;
 import com.example.timeregtest1.mainfragment.MainFragment;
-import com.example.timeregtest1.selectedDate.DateSelectedActivity;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-/*import com.example.timeregtest1.TimeRegister.TimeRegisterActivity2;*/
 
 public class MainActivity extends AppCompatActivity
 {
@@ -37,24 +22,9 @@ public class MainActivity extends AppCompatActivity
     public static final String CURRENT_MONTH_KEY = "current_month";
     public static final String CURRENT_DAY_KEY = "current_day";
 
-    private CalendarView calendarView;
-    private BottomNavigationView bottomNavigationView;
-
-    /*private FrameLayout mainActivityFragment;*/
-
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private MaterialToolbar toolbar;
-
-    private ArrayList<DateReg> allDateRegs = new ArrayList<>();
-
-    private int y = 0, m = 0, d = 0;
-
-    private Bundle bundle = new Bundle();
-
-    private Calendar today = Calendar.getInstance();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -98,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private boolean dateAllowed(Calendar today, int year, int month, int day)
+    /*private boolean dateAllowed(Calendar today, int year, int month, int day)
     {
         Calendar c = Calendar.getInstance();
 
@@ -110,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         return true;
-    }
+    }*/
 
     private void initViews()
     {
