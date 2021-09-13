@@ -33,6 +33,7 @@ public class DateSelectedFragment extends Fragment
 {
     private static final String TAG = "DateSelectedFragment";
 
+
     private ArrayList<DateReg> allDateRegs = new ArrayList<>();
     private LiveData<List<DateReg>> allDateRegsLiveData;
     private RecyclerView dateRegRecView;
