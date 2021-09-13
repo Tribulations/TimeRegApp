@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.timeregtest1.CompanyAdapter;
@@ -61,7 +62,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
     private RecyclerView companiesRecView;
     private BottomNavigationView bottomNavigationView;
 
-    private Button btnAddCompany, btnPeriod;
+    private Button btnAddCompany, btnHelp;
     private EditText edtTxtAddCompany;
 
     private ArrayList<Company> allCompanies = new ArrayList<>();
@@ -70,6 +71,11 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
     private CompanyAdapter companyAdapter;
 
     private RelativeLayout parentRelLayout;
+
+    private boolean showingHelp = false;
+
+    private Snackbar snackbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -82,7 +88,11 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
         btnAddCompany = findViewById(R.id.btnAddCompany);
         edtTxtAddCompany = findViewById(R.id.edtTxtAddCompany);
         parentRelLayout = findViewById(R.id.parentRelLayout);
-        btnPeriod = findViewById(R.id.btnPeriod);
+        btnHelp = findViewById(R.id.btnHelp);
+
+
+
+        initSnackbar();
 
         initBottomNavView();
 
@@ -163,7 +173,31 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
             }
         });
 
-        btnPeriod.setOnClickListener(new View.OnClickListener()
+        btnHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+
+                if(!showingHelp)
+                {
+                    snackbar.show();
+                    btnHelp.setText("Göm");
+                    showingHelp = true;
+                }
+                else
+                {
+                    btnHelp.setText("Hjälp");
+                    snackbar.dismiss();
+                    showingHelp = false;
+                }
+
+            }
+        });
+
+
+        /*btnPeriod.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -171,7 +205,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
                 Intent intent = new Intent(CompanyRegisterActivity.this, RegisteredDatesActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         // when a change eg. a new company is added refresh the recyclerview
         allCompaniesLiveData = CompanyDatabase.getInstance(this).companyDao().getAllCompaniesLiveData();
@@ -196,6 +230,28 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
             }
 
         });
+
+    }
+
+    private void initSnackbar()
+    {
+        snackbar = Snackbar.make(parentRelLayout, "För att lägga till " +
+                "ett nytt företag skriver du först namnet på företaget i textrutan" +
+                " och sen trycker på lägg till", Snackbar.LENGTH_INDEFINITE)
+        .setAction("Stäng", new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                snackbar.dismiss();
+                showingHelp = false;
+                btnHelp.setText("Hjälp");
+            }
+        });
+
+        View snackbarView = snackbar.getView();
+        TextView txtSnack = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        txtSnack.setMaxLines(5);
 
     }
 

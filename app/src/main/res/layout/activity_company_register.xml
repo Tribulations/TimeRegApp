@@ -7,21 +7,6 @@
     tools:context=".CompanyRegister.CompanyRegisterActivity"
     android:id="@+id/parentRelLayout">
 
-    <!--
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/companiesRecView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.033">
-
-    </FrameLayout> -->
-
-
     <RelativeLayout
         android:id="@+id/recViewRelLayout"
         android:layout_width="wrap_content"
@@ -29,7 +14,9 @@
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="7dp"
-        android:paddingBottom="60dp">
+        android:paddingBottom="60dp"
+        android:layout_below="@id/edtTxtAddCompany"
+        android:layout_centerHorizontal="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/companiesRecView"
@@ -63,6 +50,15 @@
         android:layout_marginTop="7dp"
         android:layout_marginRight="5dp"/>
 
+    <Button
+        android:id="@+id/btnHelp"
+        android:layout_width="95dp"
+        android:layout_height="39dp"
+        android:text="Hjälp"
+        android:textAllCaps="false"
+        android:layout_marginTop="7dp"
+        android:layout_marginLeft="5dp"/>
+
     <EditText
         android:id="@+id/edtTxtAddCompany"
         android:layout_width="147dp"
@@ -70,22 +66,8 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Företagsnamn"
-        android:layout_below="@id/btnAddCompany"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"/>
-
-    <Button
-        android:id="@+id/btnPeriod"
-        android:layout_width="wrap_content"
-        android:layout_height="39dp"
-        android:text="Period"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/edtTxtAddCompany"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:textAllCaps="false"/>
 
 
 </RelativeLayout>
