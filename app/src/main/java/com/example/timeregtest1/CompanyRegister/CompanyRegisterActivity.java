@@ -12,8 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -235,9 +239,17 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
 
     private void initSnackbar()
     {
-        snackbar = Snackbar.make(parentRelLayout, "För att lägga till " +
+        // make some sentences bold
+        final SpannableStringBuilder snackbarText = new SpannableStringBuilder("För att lägga till " +
                 "ett nytt företag skriver du först namnet på företaget i textrutan" +
-                " och sen trycker på lägg till", Snackbar.LENGTH_INDEFINITE)
+                " och sen trycker på lägg till.\n\n" +
+                "Ändra namn eller ta bort ett företag?\nOm du klickar på ett företagsnamn i detta fönster kommer du till ett nytt fönster " +
+                "som visar info om företaget och detta fönster kan du även ta bort eller ändra namn " +
+                "på företaget.");
+        final StyleSpan bold = new StyleSpan(Typeface.BOLD);
+        snackbarText.setSpan(bold, 115, 154, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        snackbar = Snackbar.make(parentRelLayout, snackbarText, Snackbar.LENGTH_INDEFINITE)
         .setAction("Stäng", new View.OnClickListener()
         {
             @Override
@@ -251,7 +263,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
 
         View snackbarView = snackbar.getView();
         TextView txtSnack = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
-        txtSnack.setMaxLines(5);
+        txtSnack.setMaxLines(15);
 
     }
 
