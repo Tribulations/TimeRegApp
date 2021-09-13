@@ -41,11 +41,11 @@ public class MainFragment extends Fragment
 
     /*private FrameLayout mainActivityFragment;*/
 
-    private DrawerLayout drawerLayout;
+    /*private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private MaterialToolbar toolbar;
+    private MaterialToolbar toolbar;*/
 
-    private ArrayList<DateReg> allDateRegs = new ArrayList<>();
+    /*private ArrayList<DateReg> allDateRegs = new ArrayList<>();*/
 
     private int y = 0, m = 0, d = 0;
 
@@ -80,6 +80,8 @@ public class MainFragment extends Fragment
         });
 
         initBottomNavView();
+
+        initFragmentTransaction(y, m, d);
 
         return view;
     }
