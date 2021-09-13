@@ -31,6 +31,7 @@ public abstract class CompanyDatabase extends RoomDatabase
         {
             instance = Room.databaseBuilder(context, CompanyDatabase.class, "companies_database")
                     .fallbackToDestructiveMigration()
+                    .setJournalMode(JournalMode.TRUNCATE) // needed to save the db in one file. This is needed for makin a backup
                     .addCallback(initialCallback)
                     .build();
         }
@@ -53,6 +54,11 @@ public abstract class CompanyDatabase extends RoomDatabase
 
         }
     };
+
+    public static CompanyDatabase getInstance()
+    {
+        return instance;
+    }
 
     private static class InitialAsyncTask extends AsyncTask<Void, Void, Void>
     {

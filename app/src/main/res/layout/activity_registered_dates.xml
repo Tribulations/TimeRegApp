@@ -99,7 +99,8 @@
         android:id="@+id/totTimeRelLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNavRelLayout">
+        android:layout_above="@id/bottomNavRelLayout"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

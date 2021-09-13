@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.RawQuery;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import java.util.List;
 
@@ -39,5 +41,10 @@ public interface DateRegDao
 
     @Query("DELETE FROM date_registrations WHERE id = :id")
     void deleteDateReg(int id);
+
+    // added to test implement backup of the database
+
+    @RawQuery
+    int checkpoint(SupportSQLiteQuery supportSQLiteQuery);
 
 }

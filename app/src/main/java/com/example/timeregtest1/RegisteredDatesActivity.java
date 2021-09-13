@@ -71,7 +71,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
     private RegDatesAdapter dateRegsAdapter;
     private CompanyAdapter companyAdapter;
 
-    private RelativeLayout relLayout;
+    private RelativeLayout relLayout, totTimeRelLayout;
 
     private int companyId = -1;
 
@@ -117,7 +117,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             public void onClick(View v)
             {
                 dateRegsRecView.setVisibility(View.GONE);
-                txtSumTimeWorked.setVisibility(View.GONE);
+                totTimeRelLayout.setVisibility(View.GONE);
                 txtDateInterval.setVisibility(View.GONE);
                 chooseCompanyRecView.setVisibility(View.VISIBLE);
             }
@@ -138,7 +138,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 initSearch(edtTxtNameToSearch);
                 chooseCompanyRecView.setVisibility(View.VISIBLE);
                 dateRegsRecView.setVisibility(View.GONE);
-                txtSumTimeWorked.setVisibility(View.GONE);
+                totTimeRelLayout.setVisibility(View.GONE);
                 txtDateInterval.setVisibility(View.GONE);
             }
 
@@ -171,14 +171,10 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                         @Override
                         public void onPositiveButtonClick(Pair<Long, Long> selection)
                         {
-
                             Calendar startDate = Calendar.getInstance();
                             Calendar endDate = Calendar.getInstance();
                             startDate.setTimeInMillis(selection.first);
                             endDate.setTimeInMillis(selection.second);
-
-                            /*Date start = startDate.getTime();
-                            Date end = endDate.getTime();*/
 
                             final int sYear, sMonth, sDay, eYear, eMonth, eDay;
 
@@ -205,7 +201,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                     {
                                         dateRegsAdapter.setAllDateRegs(allDateRegs);
                                         dateRegsRecView.setVisibility(View.VISIBLE);
-                                        txtSumTimeWorked.setVisibility(View.VISIBLE);
+                                        totTimeRelLayout.setVisibility(View.VISIBLE);
                                         txtDateInterval.setVisibility(View.VISIBLE);
 
                                         timeWorkedSum = 0.0f;
@@ -217,19 +213,17 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                     else
                                     {
                                         dateRegsRecView.setVisibility(View.GONE);
-                                        txtSumTimeWorked.setVisibility(View.GONE);
+                                        totTimeRelLayout.setVisibility(View.GONE);
                                         txtDateInterval.setVisibility(View.GONE);
                                         Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
 
-
                             chooseCompanyRecView.setVisibility(View.GONE);
 
                             timeWorkedSum = 0.0f;
                             calcSumTimeWorked();
-
 
                             txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
                             txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(formatDateInt(sMonth)) + "-" +
@@ -286,7 +280,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                 {
                                     dateRegsAdapter.setAllDateRegs(allDateRegs);
                                     dateRegsRecView.setVisibility(View.VISIBLE);
-                                    txtSumTimeWorked.setVisibility(View.VISIBLE);
+                                    totTimeRelLayout.setVisibility(View.VISIBLE);
                                     txtDateInterval.setVisibility(View.VISIBLE);
 
                                     timeWorkedSum = 0.0f;
@@ -297,7 +291,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                                 else
                                 {
                                     dateRegsRecView.setVisibility(View.GONE);
-                                    txtSumTimeWorked.setVisibility(View.GONE);
+                                    totTimeRelLayout.setVisibility(View.GONE);
                                     txtDateInterval.setVisibility(View.GONE);
                                     Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
                                 }
@@ -329,7 +323,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             {
                 chooseCompanyRecView.setVisibility(View.GONE);
                 dateRegsRecView.setVisibility(View.VISIBLE);
-                txtSumTimeWorked.setVisibility(View.VISIBLE);
+                totTimeRelLayout.setVisibility(View.VISIBLE);
                 txtDateInterval.setVisibility(View.VISIBLE);
             }
         });
@@ -352,6 +346,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         txtDateInterval = findViewById(R.id.txtDateInterval);
 
         bottomNavigationView = findViewById(R.id.bottomNavView);
+
+        totTimeRelLayout = findViewById(R.id.totTimeRelLayout);
     }
 
     private void initBottomNavView()

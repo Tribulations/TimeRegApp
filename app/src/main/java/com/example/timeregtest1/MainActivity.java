@@ -5,19 +5,35 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Database;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.mainfragment.MainFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity
 {
+    private static final String TAG = "MainActivity";
+
     public static final String CURRENT_YEAR_KEY = "current_year";
     public static final String CURRENT_MONTH_KEY = "current_month";
     public static final String CURRENT_DAY_KEY = "current_day";
@@ -25,6 +41,8 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private MaterialToolbar toolbar;
+
+    CompanyDatabase companyDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,5 +107,114 @@ public class MainActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
 
     }
+
+    public void backupDb()
+    {
+        try
+        {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+
+
+            if(sd.canWrite())
+            {
+                String dateRegsDbPath = getDatabasePath("date_registrations").getAbsolutePath();
+                String ftgDbPath = getDatabasePath("ftg").getAbsolutePath();
+
+                String backupPathDateRegsDb = "date_registrations_backup.db";
+                String backupPathftgDb = "ftg_backup.db";
+
+                File currentDateRegsDb = new File(dateRegsDbPath);
+                File currentFtgDb = new File(ftgDbPath);
+
+
+
+                File backupDateRegsDb = new File(sd, backupPathDateRegsDb);
+                File backupFtgDb = new File(sd, backupPathftgDb);
+
+                if(currentDateRegsDb.exists())
+                {
+                    FileChannel src = new FileInputStream(currentDateRegsDb).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDateRegsDb).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+
+                if(currentFtgDb.exists())
+                {
+                    FileChannel src = new FileInputStream(currentFtgDb).getChannel();
+                    FileChannel dst = new FileOutputStream(backupFtgDb).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /*public static void backupDatabase(Context context, String dbName)
+    {
+
+        CompanyDatabase companyDatabase = CompanyDatabase.getInstance(context);
+        companyDatabase.close();
+        File dbfile = context.getDatabasePath(dbName);
+        File sdir = new File(getFilePath(context, 0), "backup");
+        String fileName = FILE_NAME + getDateFromMillisForBackup(System.currentTimeMillis());
+        String sfpath = sdir.getPath() + File.separator + fileName;
+        if (!sdir.exists())
+        {
+            sdir.mkdirs();
+        }
+        else
+        {
+            //Directory Exists. Delete a file if count is 5 already. Because we will be creating a new.
+            //This will create a conflict if the last backup file was also on the same date. In that case,
+            //we will reduce it to 4 with the function call but the below code will again delete one more file.
+            checkAndDeleteBackupFile(sdir, sfpath);
+        }
+
+        File savefile = new File(sfpath);
+
+        if (savefile.exists())
+        {
+            Log.d(TAG, "File exists. Deleting it and then creating new file.");
+            savefile.delete();
+        }
+        try
+        {
+            if (savefile.createNewFile())
+            {
+                int buffersize = 8 * 1024;
+                byte[] buffer = new byte[buffersize];
+                int bytes_read = buffersize;
+                OutputStream savedb = new FileOutputStream(sfpath);
+                InputStream indb = new FileInputStream(dbfile);
+
+                while ((bytes_read = indb.read(buffer, 0, buffersize)) > 0)
+                {
+                    savedb.write(buffer, 0, bytes_read);
+                }
+
+                savedb.flush();
+                indb.close();
+                savedb.close();
+                SharedPreferences sharedPreferences = context.getSharedPreferences(SHAREDPREF, MODE_PRIVATE);
+                sharedPreferences.edit().putString("backupFileName", fileName).apply();
+                updateLastBackupTime(sharedPreferences);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Log.d(TAG, "ex: " + e);
+        }
+    }*/
 
 }
