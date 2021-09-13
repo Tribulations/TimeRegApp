@@ -55,29 +55,51 @@
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/dateRegsRecView"
+    <RelativeLayout
+        android:id="@+id/recViewRelLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="25dp"
-        android:visibility="gone"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="78dp"
         android:layout_below="@id/periodRelLayout"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/companyNameRecView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dateRegsRecView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/recViewRelLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="25dp"
-        android:visibility="gone"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/periodRelLayout"/>
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:paddingBottom="80dp"
+        android:layout_below="@id/periodRelLayout"
+        android:layout_centerHorizontal="true">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/companyNameRecView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
 
     <RelativeLayout
         android:id="@+id/totTimeRelLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_above="@id/bottomNavRelLayout">
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,7 +108,7 @@
             android:text="Tid i perioden:"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/txtSumTimeWorked"
-            android:layout_margin="5dp"/>
+            android:layout_marginRight="5dp"/>
 
         <TextView
             android:id="@+id/txtSumTimeWorked"
@@ -96,7 +118,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="5dp"
             android:text=""
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
