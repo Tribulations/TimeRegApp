@@ -491,7 +491,6 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             }
         });
 
-
     }
 
     private void initViews()

@@ -134,6 +134,9 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
         edtTxtCompany.setText(formatCompanyName(companyName));
         edtTxtTime.setText(String.valueOf(timeWorked));
+
+        txtWarning.setVisibility(View.VISIBLE);
+        txtWarning.setText("REDIGERAR POST: " + companyName + " " + String.valueOf(timeWorked));
     }
 
     // edit dialog
@@ -173,7 +176,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     /*private ImageView btnAccepted, btnNotAccepted, secondBtnAccepted, secondBtnNotAccepted, thirdBtnAccepted, thirdBtnNotAccepted;*/
     private RecyclerView chooseCompanyRecView;
     private ImageView btnAddInputField;
-    private TextView txtSelectedDate;
+    private TextView txtSelectedDate, txtWarning;
 
     private Bundle bundle = new Bundle();
 
@@ -314,6 +317,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
                     chooseCompanyRecView.setVisibility(View.GONE);
                     frameLayoutRelView.setVisibility(View.VISIBLE);
+                    txtWarning.setVisibility(View.GONE);
 
                     isRename = false;
                 }
@@ -587,6 +591,8 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
         bottomNavigationView = findViewById(R.id.bottomNavView);
 
         frameLayoutRelView = findViewById(R.id.frameLayoutRelView);
+
+        txtWarning = findViewById(R.id.txtWarning);
     }
 
     private void initBottomNavView()

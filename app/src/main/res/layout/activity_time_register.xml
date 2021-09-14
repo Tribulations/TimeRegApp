@@ -2,11 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timeRegConLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimeRegister.TimeRegisterActivity"
-    android:id="@+id/timeRegConLayout">
+    tools:context=".TimeRegister.TimeRegisterActivity">
 
+    <TextView
+        android:id="@+id/txtWarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/timeRegParentRelView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="REDIGERAR POST: "
+        android:textColor="#FF0101"
+        android:textSize="10sp"
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/timeRegParentRelView"
@@ -34,10 +45,10 @@
                     android:id="@+id/edtTxtCompany"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginRight="20dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
                     android:hint="Välj företag"
                     android:inputType="text" />
 
@@ -61,10 +72,10 @@
         android:id="@+id/chooseCompayRecView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_below="@id/timeRegParentRelView"
         android:layout_centerHorizontal="true"
-        android:paddingBottom="65dp"/>
+        android:paddingBottom="65dp"
+        android:visibility="gone"/>
 
     <!-- Try and use this imageView to add another input field -->
 
@@ -72,13 +83,13 @@
         android:id="@+id/btnAddInputField"
         android:layout_width="40dp"
         android:layout_height="38dp"
-        android:layout_marginBottom="64dp"
-        android:src="@drawable/ic_add"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginEnd="5dp"/>
+        android:layout_marginBottom="64dp"
+        android:src="@drawable/ic_add"/>
 
     <TextView
         android:id="@+id/txtSelectedDate"
@@ -90,25 +101,25 @@
         android:textStyle="bold" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bottomNavView"
-        app:menu="@menu/bottom_nav_menu"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/bottom_nav_menu"/>
 
     <RelativeLayout
+        android:id="@+id/frameLayoutRelView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="65dp"
-        android:paddingTop="15dp"
         android:layout_below="@id/timeRegParentRelView"
         android:layout_centerHorizontal="true"
-        android:id="@+id/frameLayoutRelView">
+        android:paddingTop="15dp"
+        android:paddingBottom="65dp">
 
         <FrameLayout
+            android:id="@+id/timeRegFrameLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/timeRegFrameLayout" />
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 
