@@ -3,12 +3,18 @@ package com.example.timeregtest1.CompanyRegister;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +27,7 @@ import com.example.timeregtest1.MainActivity;
 import com.example.timeregtest1.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.Snackbar;
 
 import static com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity.COMPANY_ID_KEY;
 import static com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity.COMPANY_NAME_KEY;
@@ -100,9 +107,15 @@ public class CompanyInfoActivity extends AppCompatActivity implements EditDialog
     private TextView txtCompanyNameCIA;
     private BottomNavigationView bottomNavigationView;
     private EditText edtTxtNewName;
+    private Button btnHelp;
+    private ConstraintLayout parentConLayout;
 
     private String companyName;
     private int companyId = -1;
+
+    private Snackbar snackbar;
+
+    private boolean showingHelp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -110,11 +123,9 @@ public class CompanyInfoActivity extends AppCompatActivity implements EditDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_company_info);
 
-        txtCompanyNameCIA = findViewById(R.id.txtCompanyNameCIA);
-        bottomNavigationView = findViewById(R.id.bottomNavView);
-        edtTxtNewName = findViewById(R.id.edtTxtNewName);
-
+        initViews();
         initBottomNavView();
+        initSnackbar();
 
         Intent intent = getIntent();
 
@@ -149,6 +160,38 @@ public class CompanyInfoActivity extends AppCompatActivity implements EditDialog
             }
         });
 
+        btnHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+
+                if(!showingHelp)
+                {
+                    snackbar.show();
+                    btnHelp.setText("Göm");
+                    showingHelp = true;
+                }
+                else
+                {
+                    btnHelp.setText("Hjälp");
+                    snackbar.dismiss();
+                    showingHelp = false;
+                }
+
+            }
+        });
+
+    }
+
+    private void initViews()
+    {
+        txtCompanyNameCIA = findViewById(R.id.txtCompanyNameCIA);
+        bottomNavigationView = findViewById(R.id.bottomNavView);
+        edtTxtNewName = findViewById(R.id.edtTxtNewName);
+        btnHelp = findViewById(R.id.btnHelp);
+        parentConLayout = findViewById(R.id.parentConLayout);
     }
 
     private void initBottomNavView()
@@ -180,6 +223,38 @@ public class CompanyInfoActivity extends AppCompatActivity implements EditDialog
                 return true;
             }
         });
+    }
+
+    private void initSnackbar()
+    {
+        // make some sentences bold
+        final SpannableStringBuilder snackbarText = new SpannableStringBuilder("För att ta " +
+                "bort det här företaget trycker du och håller in på företagsnamnet " +
+                "och sedan väljer ta bort.\n\n" +
+                "Ändra namn på företaget?\nOm du vill byta namn på det här företaget " +
+                "så skirver du först in det nya namnet i textrutan och sedan trycker " +
+                "och håller in på företagsnamnet och sedan i fönstret som kommer upp klickar " +
+                "du på ändra namn.");
+
+        final StyleSpan bold = new StyleSpan(Typeface.BOLD);
+        snackbarText.setSpan(bold, 100, 128, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        snackbar = Snackbar.make(parentConLayout, snackbarText, Snackbar.LENGTH_INDEFINITE)
+                .setAction("Stäng", new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        snackbar.dismiss();
+                        showingHelp = false;
+                        btnHelp.setText("Hjälp");
+                    }
+                });
+
+        View snackbarView = snackbar.getView();
+        TextView txtSnack = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        txtSnack.setMaxLines(15);
+
     }
 
     public class DeleteCompanyThread implements Runnable
