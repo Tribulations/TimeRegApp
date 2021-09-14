@@ -552,16 +552,18 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
     private void initSnackbar()
     {
         // make some sentences bold
-        final SpannableStringBuilder snackbarText = new SpannableStringBuilder("För att ta " +
-                "bort det här företaget trycker du och håller in på företagsnamnet " +
-                "och sedan väljer ta bort.\n\n" +
-                "Ändra namn på företaget?\nOm du vill byta namn på det här företaget " +
-                "så skirver du först in det nya namnet i textrutan och sedan trycker " +
-                "och håller in på företagsnamnet och sedan i fönstret som kommer upp klickar " +
-                "du på ändra namn.");
+        final SpannableStringBuilder snackbarText = new SpannableStringBuilder("För att visa " +
+                "alla registrerade tider för ett visst företag så väljer man först företaget " +
+                "och sedan klickar på knappen period för att i fönstret som kommer upp välja mellan " +
+                "vilka datum perioden ska sträcka sig.\n\n" +
+                "Visa alla företags tider under en viss period?\nOm du vill visa tider för alla " +
+                "företag under en viss period behöver man se till att textfältet är tomt och " +
+                "därefter klickar man på knappen period för att välja start och slut datum för " +
+                "den period man vill visa.");
 
+        // ge fetstil till en del av texten
         final StyleSpan bold = new StyleSpan(Typeface.BOLD);
-        snackbarText.setSpan(bold, 100, 128, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        snackbarText.setSpan(bold, 205, 258, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         snackbar = Snackbar.make(parentRelLayout, snackbarText, Snackbar.LENGTH_INDEFINITE)
                 .setAction("Stäng", new View.OnClickListener()
