@@ -59,12 +59,12 @@
         android:id="@+id/edtTxtNewName"
         android:layout_width="135dp"
         android:layout_height="41dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="Nytt namn?"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.909"
+        app:layout_constraintHorizontal_bias="0.942"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

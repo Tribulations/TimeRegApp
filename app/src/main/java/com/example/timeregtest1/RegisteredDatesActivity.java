@@ -10,11 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +39,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,7 +67,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private ArrayList<Company> searchedCompanies;
 
-    private Button btnSelectPeriod, btnCompanyNameToSearch;
+    private Button btnSelectPeriod, btnHelp;
     private RecyclerView dateRegsRecView, chooseCompanyRecView;
 
     private EditText edtTxtNameToSearch;
@@ -71,13 +77,17 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
     private RegDatesAdapter dateRegsAdapter;
     private CompanyAdapter companyAdapter;
 
-    private RelativeLayout relLayout, totTimeRelLayout;
+    private RelativeLayout parentRelLayout, totTimeRelLayout;
 
     private int companyId = -1;
 
     private float timeWorkedSum = 0.0f;
 
     private BottomNavigationView bottomNavigationView;
+
+    private boolean showingHelp = false;
+
+    private Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -88,6 +98,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         initViews();
 
         initBottomNavView();
+
+        initSnackbar();
 
         companyAdapter = new CompanyAdapter(this);
         chooseCompanyRecView.setAdapter(companyAdapter);
@@ -149,7 +161,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             }
         });
 
-        btnCompanyNameToSearch.setOnClickListener(new View.OnClickListener()
+        /*btnCompanyNameToSearch.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -232,9 +244,9 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                     });
                 }
             }
-        });
+        });*/
 
-        btnSelectPeriod.setOnClickListener(new View.OnClickListener()
+        /*btnSelectPeriod.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -310,13 +322,164 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                     }
                 });
             }
+        });*/
+
+        btnSelectPeriod.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                MaterialDatePicker rangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                        .setTitleText("Välj tidsperiod")
+                        .build();
+
+                rangePicker.show(getSupportFragmentManager(), "tag");
+
+                rangePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>()
+                {
+                    @Override
+                    public void onPositiveButtonClick(Pair<Long, Long> selection)
+                    {
+                        Calendar startDate = Calendar.getInstance();
+                        Calendar endDate = Calendar.getInstance();
+                        startDate.setTimeInMillis(selection.first);
+                        endDate.setTimeInMillis(selection.second);
+
+                        final int sYear, sMonth, sDay, eYear, eMonth, eDay;
+
+                        sYear = startDate.get(Calendar.YEAR);
+                        sMonth = startDate.get(Calendar.MONTH) + 1;
+                        sDay = startDate.get(Calendar.DAY_OF_MONTH);
+                        eYear = endDate.get(Calendar.YEAR);
+                        eMonth = endDate.get(Calendar.MONTH) + 1;
+                        eDay = endDate.get(Calendar.DAY_OF_MONTH);
+
+                        if(!edtTxtNameToSearch.getText().toString().equals("") && companyId != -1) // if the textfield is not empty, and a company has been clicked
+                        {
+
+                            Thread thread = new Thread(new GetAllDateRegsInPeriodByCompanyIdThread(selection.first, selection.second, companyId));
+                            thread.start();
+
+                            allDateRegsLiveData = CompanyDatabase.getInstance(RegisteredDatesActivity.this).dateRegDao().getAllDateRegsInPeriodByCompanyIdLiveData(selection.first, selection.second, companyId);
+                            allDateRegsLiveData.observe(RegisteredDatesActivity.this, new Observer<List<DateReg>>()
+                            {
+                                @Override
+                                public void onChanged(List<DateReg> dateRegs)
+                                {
+                                            /*Thread thread = new Thread(new GetAllDateRegsInPeriodThread(selection.first, selection.second));
+                                            thread.start();*/
+
+                                    if(allDateRegs != null && allDateRegs.size() > 0)
+                                    {
+                                        dateRegsAdapter.setAllDateRegs(allDateRegs);
+                                        dateRegsRecView.setVisibility(View.VISIBLE);
+                                        totTimeRelLayout.setVisibility(View.VISIBLE);
+                                        txtDateInterval.setVisibility(View.VISIBLE);
+
+                                        timeWorkedSum = 0.0f;
+                                        calcSumTimeWorked();
+
+                                        txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
+
+                                    }
+                                    else
+                                    {
+                                        dateRegsRecView.setVisibility(View.GONE);
+                                        totTimeRelLayout.setVisibility(View.GONE);
+                                        txtDateInterval.setVisibility(View.GONE);
+                                        Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+                            chooseCompanyRecView.setVisibility(View.GONE);
+
+                            timeWorkedSum = 0.0f;
+                            calcSumTimeWorked();
+
+                            txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
+                            txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(formatDateInt(sMonth)) + "-" +
+                                    String.valueOf(formatDateInt(sDay)) + " till " + String.valueOf(eYear) + "-" + String.valueOf(formatDateInt(eMonth)) + "-" + String.valueOf(formatDateInt(eDay)));
+                        }
+                        else
+                        {
+                            Thread thread = new Thread(new GetAllDateRegsInPeriodThread(selection.first, selection.second));
+                            thread.start();
+
+                            allDateRegsLiveData = CompanyDatabase.getInstance(RegisteredDatesActivity.this).dateRegDao().getAllDateRegsInPeriodLiveData(selection.first, selection.second);
+                            allDateRegsLiveData.observe(RegisteredDatesActivity.this, new Observer<List<DateReg>>()
+                            {
+                                @Override
+                                public void onChanged(List<DateReg> dateRegs)
+                                {
+                                /*Thread thread = new Thread(new GetAllDateRegsInPeriodThread(selection.first, selection.second));
+                                thread.start();*/
+
+                                    if(dateRegs != null && dateRegs.size() > 0)
+                                    {
+                                        dateRegsAdapter.setAllDateRegs((ArrayList<DateReg>) dateRegs);
+                                        dateRegsRecView.setVisibility(View.VISIBLE);
+                                        totTimeRelLayout.setVisibility(View.VISIBLE);
+                                        txtDateInterval.setVisibility(View.VISIBLE);
+
+                                        timeWorkedSum = 0.0f;
+                                        calcSumTimeWorked();
+
+                                        txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
+                                    }
+                                    else
+                                    {
+                                        dateRegsRecView.setVisibility(View.GONE);
+                                        totTimeRelLayout.setVisibility(View.GONE);
+                                        txtDateInterval.setVisibility(View.GONE);
+                                        Toast.makeText(RegisteredDatesActivity.this, "Det finns inga registrerade tider under det valda intervallet!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+                            chooseCompanyRecView.setVisibility(View.GONE);
+
+                            timeWorkedSum = 0.0f;
+                            calcSumTimeWorked();
+
+                            txtSumTimeWorked.setText(String.valueOf(timeWorkedSum));
+                            txtDateInterval.setText(String.valueOf(sYear) + "-" + String.valueOf(formatDateInt(sMonth)) + "-" +
+                                    String.valueOf(formatDateInt(sDay)) + " till " + String.valueOf(eYear) + "-" + String.valueOf(formatDateInt(eMonth)) + "-" + String.valueOf(formatDateInt(eDay)));
+                        }
+
+                    }
+                });
+            }
+        });
+
+        btnHelp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+
+                if(!showingHelp)
+                {
+                    snackbar.show();
+                    btnHelp.setText("Göm");
+                    showingHelp = true;
+                }
+                else
+                {
+                    btnHelp.setText("Hjälp");
+                    snackbar.dismiss();
+                    showingHelp = false;
+                }
+
+            }
         });
         
         dateRegsAdapter = new RegDatesAdapter();
         dateRegsRecView.setAdapter(dateRegsAdapter);
         dateRegsRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
-        relLayout.setOnClickListener(new View.OnClickListener()
+        parentRelLayout.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -333,13 +496,13 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private void initViews()
     {
-        btnSelectPeriod = findViewById(R.id.btnSelectPeriod);
-        btnCompanyNameToSearch = findViewById(R.id.btnCompanyNameToSearch);
+        /*btnSelectPeriod = findViewById(R.id.btnSelectPeriod);
+        btnCompanyNameToSearch = findViewById(R.id.btnCompanyNameToSearch);*/
         dateRegsRecView = findViewById(R.id.dateRegsRecView);
         chooseCompanyRecView = findViewById(R.id.companyNameRecView);
         edtTxtNameToSearch = findViewById(R.id.edtTxtNameToSearch);
 
-        relLayout = findViewById(R.id.relLayout);
+        parentRelLayout = findViewById(R.id.parentRelLayout);
 
         txtSumTimeWorked = findViewById(R.id.txtSumTimeWorked);
 
@@ -348,6 +511,10 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         bottomNavigationView = findViewById(R.id.bottomNavView);
 
         totTimeRelLayout = findViewById(R.id.totTimeRelLayout);
+
+        btnSelectPeriod = findViewById(R.id.btnSelectPeriod);
+
+        btnHelp = findViewById(R.id.btnHelp);
     }
 
     private void initBottomNavView()
@@ -380,6 +547,38 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 return true;
             }
         });
+    }
+
+    private void initSnackbar()
+    {
+        // make some sentences bold
+        final SpannableStringBuilder snackbarText = new SpannableStringBuilder("För att ta " +
+                "bort det här företaget trycker du och håller in på företagsnamnet " +
+                "och sedan väljer ta bort.\n\n" +
+                "Ändra namn på företaget?\nOm du vill byta namn på det här företaget " +
+                "så skirver du först in det nya namnet i textrutan och sedan trycker " +
+                "och håller in på företagsnamnet och sedan i fönstret som kommer upp klickar " +
+                "du på ändra namn.");
+
+        final StyleSpan bold = new StyleSpan(Typeface.BOLD);
+        snackbarText.setSpan(bold, 100, 128, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        snackbar = Snackbar.make(parentRelLayout, snackbarText, Snackbar.LENGTH_INDEFINITE)
+                .setAction("Stäng", new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        snackbar.dismiss();
+                        showingHelp = false;
+                        btnHelp.setText("Hjälp");
+                    }
+                });
+
+        View snackbarView = snackbar.getView();
+        TextView txtSnack = (TextView) snackbarView.findViewById(com.google.android.material.R.id.snackbar_text);
+        txtSnack.setMaxLines(15);
+
     }
 
     private void initSearch(EditText editText)
