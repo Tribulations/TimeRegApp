@@ -33,29 +33,20 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
     public void onBindViewHolder(@NonNull RegDatesAdapter.ViewHolder holder, int position)
     {
         // just show the first 17 letters of the company name
-        String shortName = allDateRegs.get(position).getCompanyName();
-        if(shortName.length() > 17)
-        {
-            shortName = shortName.substring(0, 16);
-            shortName = shortName + ".";
-        }
-
+        String shortName = formatString(17, allDateRegs.get(position).getCompanyName());
 
 
         holder.txtCompanyName.setText(shortName);
         holder.txtTimeWorked.setText(String.valueOf(allDateRegs.get(position).getTimeWorked()));
-        /*holder.txtDate.setText(String.valueOf(allDateRegs.get(position).getYear()) + "-"
-                + formatDate(allDateRegs.get(position).getMonth()) + "-" + formatDate(allDateRegs.get(position).getDay()));*/
 
-        // use the timestamp instead of the string type to show the date
-        /*Calendar date = Calendar.getInstance();
-        date.setTimeInMillis(allDateRegs.get(position).getTimestamp());*/
         Date d = new Date();
         d.setTime(allDateRegs.get(position).getTimestamp());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = simpleDateFormat.format(d);
 
         holder.txtDate.setText(date);
+
+        holder.txtNote.setText(formatString(10, allDateRegs.get(position).getNote()));
     }
 
     @Override
@@ -77,7 +68,7 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView txtCompanyName, txtTimeWorked, txtDate;
+        private TextView txtCompanyName, txtTimeWorked, txtDate, txtNote;
 
         public ViewHolder(@NonNull View itemView)
         {
@@ -86,6 +77,7 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
             txtCompanyName = itemView.findViewById(R.id.txtCompanyName);
             txtTimeWorked = itemView.findViewById(R.id.txtTimeWorked);
             txtDate = itemView.findViewById(R.id.txtDate);
+            txtNote = itemView.findViewById(R.id.txtNote);
         }
     }
 
@@ -123,6 +115,18 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
         }
 
         return name;
+    }
+
+    // only show up to 17 letters i the recview
+    private  String formatString(int totalLetters, String text)
+    {
+        if(text.length() > totalLetters)
+        {
+            text = text.substring(0, totalLetters - 1);
+            text = text + ".";
+        }
+
+        return text;
     }
 
 }
