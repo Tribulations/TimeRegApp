@@ -77,7 +77,6 @@
 
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/recViewRelLayout2"
         android:layout_width="wrap_content"
@@ -96,8 +95,6 @@
             android:visibility="gone" />
 
     </RelativeLayout>
-
-
 
     <RelativeLayout
         android:id="@+id/totTimeRelLayout"
@@ -127,7 +124,6 @@
 
     </RelativeLayout>
 
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,6 +135,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:menu="@menu/bottom_nav_menu" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/noteWindowLayout"
+        android:layout_centerInParent="true"
+        android:background="#F4F4F4"
+        android:visibility="gone"
+        android:elevation="15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtLongNote"
+            android:textStyle="bold"
+            android:text="This is a longer note that needs to be shown on screen"
+            android:layout_centerVertical="true"
+            android:layout_margin="3dp"/>
+
+        <ImageButton
+            android:id="@+id/btnCloseWindow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            android:layout_toRightOf="@id/txtLongNote"
+            android:layout_marginLeft="3dp"/>
 
     </RelativeLayout>
 

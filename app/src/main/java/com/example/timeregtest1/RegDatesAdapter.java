@@ -1,5 +1,6 @@
 package com.example.timeregtest1;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,20 @@ import java.util.Date;
 public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHolder>
 {
     private ArrayList<DateReg> allDateRegs = new ArrayList<>();
+
+    private Context context;
+
+    public interface RegDateClicked
+    {
+        void onRegDateClicked(String regDateNote);
+    }
+
+    private RegDateClicked regDateClicked;
+
+    public RegDatesAdapter(Context context)
+    {
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -47,6 +62,23 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
         holder.txtDate.setText(date);
 
         holder.txtNote.setText(formatString(10, allDateRegs.get(position).getNote()));
+
+        holder.txtNote.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                try
+                {
+                    regDateClicked = (RegDateClicked) context;
+                    regDateClicked.onRegDateClicked(allDateRegs.get(position).getNote());
+                }
+                catch (ClassCastException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

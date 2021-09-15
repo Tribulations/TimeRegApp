@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,16 +47,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class RegisteredDatesActivity extends AppCompatActivity implements CompanyAdapter.CompanyNameClicked
+public class RegisteredDatesActivity extends AppCompatActivity implements CompanyAdapter.CompanyNameClicked, RegDatesAdapter.RegDateClicked
 {
-    @Override
-    public void onCompanyNameClicked(String companyName, int id)
-    {
-        companyId = id;
 
-        edtTxtNameToSearch.setText(formatCompanyName(companyName));
-        edtTxtNameToSearch.clearFocus();
-    }
 
     private static final String TAG = "RegisteredDatesActivity";
     
@@ -72,12 +66,14 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private EditText edtTxtNameToSearch;
 
-    private TextView txtSumTimeWorked, txtDateInterval;
+    private ImageButton btnCloseWindow;
+
+    private TextView txtSumTimeWorked, txtDateInterval, txtLongNote;
 
     private RegDatesAdapter dateRegsAdapter;
     private CompanyAdapter companyAdapter;
 
-    private RelativeLayout parentRelLayout, totTimeRelLayout;
+    private RelativeLayout parentRelLayout, totTimeRelLayout, noteWindowLayout;
 
     private int companyId = -1;
 
@@ -88,6 +84,22 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
     private boolean showingHelp = false;
 
     private Snackbar snackbar;
+
+    @Override
+    public void onRegDateClicked(String regDateNote)
+    {
+        noteWindowLayout.setVisibility(View.VISIBLE);
+        txtLongNote.setText(regDateNote);
+    }
+
+    @Override
+    public void onCompanyNameClicked(String companyName, int id)
+    {
+        companyId = id;
+
+        edtTxtNameToSearch.setText(formatCompanyName(companyName));
+        edtTxtNameToSearch.clearFocus();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -475,7 +487,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
             }
         });
         
-        dateRegsAdapter = new RegDatesAdapter();
+        dateRegsAdapter = new RegDatesAdapter(this);
         dateRegsRecView.setAdapter(dateRegsAdapter);
         dateRegsRecView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
 
@@ -488,6 +500,15 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 dateRegsRecView.setVisibility(View.VISIBLE);
                 totTimeRelLayout.setVisibility(View.VISIBLE);
                 txtDateInterval.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnCloseWindow.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                noteWindowLayout.setVisibility(View.GONE);
             }
         });
 
@@ -514,6 +535,12 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         btnSelectPeriod = findViewById(R.id.btnSelectPeriod);
 
         btnHelp = findViewById(R.id.btnHelp);
+
+        noteWindowLayout = findViewById(R.id.noteWindowLayout);
+
+        txtLongNote = findViewById(R.id.txtLongNote);
+
+        btnCloseWindow = findViewById(R.id.btnCloseWindow);
     }
 
     private void initBottomNavView()
