@@ -9,11 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.ArrayList;
 
-@Database(entities = {Company.class, DateReg.class}, version = 1)
+@Database(entities = {Company.class, DateReg.class}, version = 2)
 public abstract class CompanyDatabase extends RoomDatabase
 {
     private static final String TAG = "CompanyDatabase";
@@ -30,7 +31,7 @@ public abstract class CompanyDatabase extends RoomDatabase
         if(instance == null)
         {
             instance = Room.databaseBuilder(context, CompanyDatabase.class, "companies_database")
-                    .fallbackToDestructiveMigration()
+                    .addMigrations(MIGRATION_1_2)
                     .setJournalMode(JournalMode.TRUNCATE) // needed to save the db in one file. This is needed for makin a backup
                     .addCallback(initialCallback)
                     .build();
@@ -52,6 +53,15 @@ public abstract class CompanyDatabase extends RoomDatabase
             // call asynctask
             new InitialAsyncTask(instance).execute();
 
+        }
+    };
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2)
+    {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database)
+        {
+            database.execSQL("ALTER TABLE date_registrations ADD COLUMN note TEXT");
         }
     };
 

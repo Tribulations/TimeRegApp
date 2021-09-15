@@ -21,8 +21,9 @@ public class DateReg
     private long timestamp;
     @ColumnInfo(name = "company_id")
     private int companyId;
+    private String note;
 
-    public DateReg(int year, int month, int day, String companyName, float timeWorked, long timestamp, int companyId)
+    public DateReg(int year, int month, int day, String companyName, float timeWorked, long timestamp, int companyId, String note)
     {
         this.year = year;
         this.month = month;
@@ -31,6 +32,7 @@ public class DateReg
         this.timeWorked = timeWorked;
         this.timestamp = timestamp;
         this.companyId = companyId;
+        this.note = note;
     }
 
     public int getId()
@@ -113,17 +115,29 @@ public class DateReg
         this.companyId = companyId;
     }
 
+    public String getNote()
+    {
+        return note;
+    }
+
+    public void setNote(String note)
+    {
+        this.note = note;
+    }
+
     @Ignore
     @Override
     public String toString()
     {
         return "DateReg{" +
-                "year=" + year +
+                "id=" + id +
+                ", year=" + year +
                 ", month=" + month +
                 ", day=" + day +
                 ", companyName='" + companyName + '\'' +
                 ", timeWorked=" + timeWorked +
                 ", timestamp=" + timestamp +
+                ", note='" + note + '\'' +
                 '}';
     }
 }

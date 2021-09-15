@@ -359,7 +359,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                                 Calendar currentDate = Calendar.getInstance();
                                 currentDate.set(y, m, d, 12, 0, 0); // the month is counted from 0
 
-                                DateReg dateReg = new DateReg(y, m, d, companyById.getCompanyName(), companyHours.get(i), currentDate.getTimeInMillis(), companyId); // Adding m + 1to get the String type date in the DateRag class to display month correct. (month is counted from 0)
+                                DateReg dateReg = new DateReg(y, m, d, companyById.getCompanyName(), companyHours.get(i), currentDate.getTimeInMillis(), companyId, "");
 
                                 // add company to database
                                 Thread t3 = new Thread(new InsertDateRegThread(dateReg));
