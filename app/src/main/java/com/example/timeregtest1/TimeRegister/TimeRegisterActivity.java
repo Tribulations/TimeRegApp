@@ -82,6 +82,32 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     // used to keep track of when the user wants to update or delete a datereg post
     private boolean isRename = false;
 
+    private ScrollView timeRegScrollView;
+    private RelativeLayout timeRegParentRelLayout, timeRegRelLayout, firstTimeRegRelLayout, secondTimeRegRelLayout;
+    private EditText edtTxtCompany, edtTxtTime, edtTxtNote, secondEdtTxtCompany, thirdEdtTxtCompany;
+    private RecyclerView chooseCompanyRecView;
+    private ImageView btnAddInputField;
+    private TextView txtSelectedDate, txtWarning;
+
+    private Bundle bundle = new Bundle();
+
+    private RelativeLayout timeRegConLayout, constraintLayout;
+
+    private ArrayList<Company> allCompanies;
+
+    private LiveData<List<Company>> allCompaniesLiveData;
+
+    private ArrayList<DateReg> allDateRegs = new ArrayList<>();
+    private LiveData<List<DateReg>> allDateRegsLiveData;
+
+    private ArrayList<Company> searchedCompanies;
+
+    private CompanyAdapter companyAdapter;
+
+    private BottomNavigationView bottomNavigationView;
+
+    private RelativeLayout frameLayoutRelView;
+
     // set the edittext text to the company name that is clicked in the recview
     @Override
     public void onCompanyNameClicked(String companyName , int id)
@@ -170,36 +196,6 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
         deleteDialog.show();
     }
 
-    private ScrollView timeRegScrollView;
-    private RelativeLayout timeRegParentRelLayout, timeRegRelLayout, firstTimeRegRelLayout, secondTimeRegRelLayout;
-    private EditText edtTxtCompany, edtTxtTime, edtTxtNote, secondEdtTxtCompany, thirdEdtTxtCompany;
-    /*private ImageView btnAccepted, btnNotAccepted, secondBtnAccepted, secondBtnNotAccepted, thirdBtnAccepted, thirdBtnNotAccepted;*/
-    private RecyclerView chooseCompanyRecView;
-    private ImageView btnAddInputField;
-    private TextView txtSelectedDate, txtWarning;
-
-    private Bundle bundle = new Bundle();
-
-    private RelativeLayout timeRegConLayout, constraintLayout;
-
-    private ArrayList<Company> allCompanies;
-
-    private LiveData<List<Company>> allCompaniesLiveData;
-
-    private ArrayList<DateReg> allDateRegs = new ArrayList<>();
-    private LiveData<List<DateReg>> allDateRegsLiveData;
-
-    private ArrayList<Company> searchedCompanies;
-
-    private CompanyAdapter companyAdapter;
-
-    private BottomNavigationView bottomNavigationView;
-
-    private RelativeLayout frameLayoutRelView;
-
-    /*private FrameLayout timeRegFrameLayout;*/
-
-    // only make the clicklistneers here with a swtich but doesnt work atr the moment
     @Override
     public void onClick(View v)
     {
@@ -424,9 +420,6 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                 break;*/
             default:
                 break;
-
-
-
         }
     }
 
