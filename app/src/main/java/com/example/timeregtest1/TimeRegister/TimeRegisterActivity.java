@@ -172,7 +172,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
     private ScrollView timeRegScrollView;
     private RelativeLayout timeRegParentRelLayout, timeRegRelLayout, firstTimeRegRelLayout, secondTimeRegRelLayout;
-    private EditText edtTxtCompany, edtTxtTime, secondEdtTxtCompany, secondEdtTxtTime, thirdEdtTxtCompany, thirdEdtTxtTime;
+    private EditText edtTxtCompany, edtTxtTime, edtTxtNote, secondEdtTxtCompany, thirdEdtTxtCompany;
     /*private ImageView btnAccepted, btnNotAccepted, secondBtnAccepted, secondBtnNotAccepted, thirdBtnAccepted, thirdBtnNotAccepted;*/
     private RecyclerView chooseCompanyRecView;
     private ImageView btnAddInputField;
@@ -359,7 +359,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                                 Calendar currentDate = Calendar.getInstance();
                                 currentDate.set(y, m, d, 12, 0, 0); // the month is counted from 0
 
-                                DateReg dateReg = new DateReg(y, m, d, companyById.getCompanyName(), companyHours.get(i), currentDate.getTimeInMillis(), companyId, "");
+                                DateReg dateReg = new DateReg(y, m, d, companyById.getCompanyName(), companyHours.get(i), currentDate.getTimeInMillis(), companyId, edtTxtNote.getText().toString());
 
                                 // add company to database
                                 Thread t3 = new Thread(new InsertDateRegThread(dateReg));
@@ -380,14 +380,19 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                         // clear the fields
                         edtTxtCompany.setText("");
                         edtTxtTime.setText("");
-                        if(edtTxtTime.isFocused())
-                        {
-                            edtTxtTime.clearFocus();
-                        }
+                        edtTxtNote.setText("");
 
                         if (edtTxtCompany.isFocused())
                         {
                             edtTxtCompany.clearFocus();
+                        }
+                        if(edtTxtTime.isFocused())
+                        {
+                            edtTxtTime.clearFocus();
+                        }
+                        if(edtTxtNote.isFocused())
+                        {
+                            edtTxtNote.clearFocus();
                         }
 
                         frameLayoutRelView.setVisibility(View.VISIBLE);
@@ -575,6 +580,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
         timeRegRelLayout = findViewById(R.id.timeRegRelLayout);
         edtTxtCompany = findViewById(R.id.edtTxtCompany);
         edtTxtTime = findViewById(R.id.edtTxtTime);
+        edtTxtNote = findViewById(R.id.edtTxtNote);
 
         chooseCompanyRecView = findViewById(R.id.chooseCompayRecView);
 
