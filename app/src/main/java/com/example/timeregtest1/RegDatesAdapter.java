@@ -152,10 +152,13 @@ public class RegDatesAdapter extends RecyclerView.Adapter<RegDatesAdapter.ViewHo
     // only show up to 17 letters i the recview
     private  String formatString(int totalLetters, String text)
     {
-        if(text.length() > totalLetters)
+        if(text != null)
         {
-            text = text.substring(0, totalLetters - 1);
-            text = text + ".";
+            if(text.length() > totalLetters)
+            {
+                text = text.substring(0, totalLetters - 1);
+                text = text + ".";
+            }
         }
 
         return text;
