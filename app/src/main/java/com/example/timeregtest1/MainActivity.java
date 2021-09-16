@@ -66,8 +66,7 @@ public class MainActivity extends AppCompatActivity
         View navDrawerHeader = navigationView.getHeaderView(0);
         TextView txtVersion = navDrawerHeader.findViewById(R.id.txtVersion);
 
-        // get the versionname
-
+        // get the version name of this application
         String version = "";
         try {
             PackageInfo pInfo = this.getPackageManager().getPackageInfo(this.getPackageName(), 0);
