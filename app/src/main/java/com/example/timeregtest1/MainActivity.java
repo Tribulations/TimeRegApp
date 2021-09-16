@@ -11,11 +11,15 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import android.os.Environment;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.mainfragment.MainFragment;
@@ -57,6 +61,22 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        // get the textview in the navdrawer to set the versionname in the navdrawer
+        View navDrawerHeader = navigationView.getHeaderView(0);
+        TextView txtVersion = navDrawerHeader.findViewById(R.id.txtVersion);
+
+        // get the versionname
+
+        String version = "";
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(this.getPackageName(), 0);
+            version = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        txtVersion.setText(txtVersion.getText().toString() + " version " + version);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
         {
