@@ -147,22 +147,32 @@
         android:visibility="gone"
         android:elevation="15dp">
 
-        <TextView
+        <ScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtLongNote"
-            android:textStyle="bold"
-            android:text="This is a longer note that needs to be shown on screen"
-            android:layout_centerVertical="true"
-            android:layout_margin="3dp"/>
+            android:layout_height="40dp"
+            android:id="@+id/longNoteScrollView"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtLongNote"
+                android:textStyle="bold"
+                android:text="A note"
+                android:layout_centerVertical="true"
+                android:layout_margin="5dp"
+                android:padding="3dp"/>
+
+        </ScrollView>
 
         <ImageButton
             android:id="@+id/btnCloseWindow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close"
-            android:layout_toRightOf="@id/txtLongNote"
-            android:layout_marginLeft="3dp"/>
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@id/longNoteScrollView"
+            android:layout_centerVertical="true"/>
 
     </RelativeLayout>
 
