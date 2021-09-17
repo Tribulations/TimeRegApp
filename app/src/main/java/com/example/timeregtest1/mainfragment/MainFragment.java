@@ -1,6 +1,7 @@
 package com.example.timeregtest1.mainfragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,10 +12,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.timeregtest1.BackupDatabase;
 import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
 import com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity;
@@ -27,6 +30,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -55,7 +61,9 @@ public class MainFragment extends Fragment
     private Calendar today = Calendar.getInstance();
 
     CompanyDatabase companyDatabase;
+    BackupDatabase backupDatabase;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -85,10 +93,6 @@ public class MainFragment extends Fragment
         initBottomNavView();
 
         initFragmentTransaction(y, m, d);
-
-        companyDatabase = CompanyDatabase.getInstance(getActivity());
-
-        Toast.makeText(getActivity(), companyDatabase.getOpenHelper().getReadableDatabase().getPath(), Toast.LENGTH_LONG).show();
 
         return view;
     }

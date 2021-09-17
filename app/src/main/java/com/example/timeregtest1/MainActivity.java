@@ -88,7 +88,8 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         break;
                     case R.id.nav_drawer_item2:
-
+                        Intent temporaryIntent = new Intent(MainActivity.this, TempActivity.class);
+                        startActivity(temporaryIntent);
                         break;
                     default:
                         break;
