@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
 import com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity;
 import com.example.timeregtest1.DateSelectedFragment;
@@ -53,6 +54,8 @@ public class MainFragment extends Fragment
 
     private Calendar today = Calendar.getInstance();
 
+    CompanyDatabase companyDatabase;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -82,6 +85,10 @@ public class MainFragment extends Fragment
         initBottomNavView();
 
         initFragmentTransaction(y, m, d);
+
+        companyDatabase = CompanyDatabase.getInstance(getActivity());
+
+        Toast.makeText(getActivity(), companyDatabase.getOpenHelper().getReadableDatabase().getPath(), Toast.LENGTH_LONG).show();
 
         return view;
     }
