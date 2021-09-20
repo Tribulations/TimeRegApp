@@ -15,7 +15,7 @@ public interface DateRegDao
     @Insert
     void insert(DateReg dateReg);
 
-    @Query("SELECT * FROM date_registrations")
+    @Query("SELECT * FROM date_registrations ORDER BY timestamp, company_name")
     List<DateReg> getAllRegistrations();
 
     @Query("SELECT * FROM date_registrations WHERE timestamp >= :timestampStart AND timestamp < :timestampEnd + 86400000 ORDER BY timestamp ASC")

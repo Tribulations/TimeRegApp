@@ -2,6 +2,7 @@ package com.example.timeregtest1;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
 
 import org.acra.ACRA;
 import org.acra.annotation.AcraCore;
@@ -26,5 +27,14 @@ public class MyApplication extends Application
 
         // init ACRA
         ACRA.init(this, builder);
+    }
+
+    // needed when sending the backupfile by email. Something beacuse of api versions
+    @Override
+    public void onCreate()
+    {
+        super.onCreate();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
     }
 }
