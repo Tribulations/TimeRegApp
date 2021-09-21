@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.os.Environment.DIRECTORY_DOCUMENTS;
 import static java.net.Proxy.Type.HTTP;
 
 public class BackupDatabase
@@ -142,10 +144,17 @@ public class BackupDatabase
         /*emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");*/
         emailIntent.putExtra(Intent.EXTRA_TEXT, "The message goes here");
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + pathToCsvBackupFile));
+
+        if(Environment.getExternalStorageDirectory().canRead())
+        {
+            System.out.println("Can write to external --------------------------------------------");
+        }
+
+
         /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + pathToCsvFileExternalStorage));*/
         /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.csv"));*/
         System.out.println("file://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.txt");
-        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         context.startActivity(Intent.createChooser(emailIntent, "createChooser used"));
     }
 
@@ -153,9 +162,16 @@ public class BackupDatabase
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void writeToExternal(String filename)
     {
-        try {
+        try
+        {
             /*File file = new File(context.getExternalFilesDir(null), filename);*/ //Get file location from external source
             File file = new File(context.getExternalCacheDir(), filename); // trying to write to cacheDIr instead of above
+
+
+            String filePathToNewCreatedDirFile = getStorageDir("companies_database" + filenameSuffix);
+
+            /*File file = new File(Environment.getExternalStoragePublicDirectory("DIRECTORY_DOCUMENTS"), filename);*/ // new test again changed from the above
+            /*File file = new File(filePathToNewCreatedDirFile);*/
             /*InputStream is = new FileInputStream(context.getFilesDir() + File.separator + filename);*/ //get file location from internal
             /*InputStream is = new FileInputStream(pathToCsvBackupFile);*/ // this line instead from the one above. The above gets the wrong folder /files that doesn't exist in the timeregapp folder
             InputStream is = new FileInputStream(Paths.get(pathToCsvBackupFile).toString()); // another test with this line again. changed from the one above obviously
@@ -185,6 +201,9 @@ public class BackupDatabase
             System.out.println("-----------------------------------------------------------------\n\n\n");
             System.out.println("The external path: cache: " + pathToCsvFileExternalStorage);
             System.out.println("The external path: " + context.getExternalFilesDir(null) + File.separator + filename);
+
+
+
         }
         catch (Exception e)
         {
@@ -193,5 +212,21 @@ public class BackupDatabase
             Toast.makeText(context, "Tried to copy from: " + context.getFilesDir() + File.separator + filename + "", Toast.LENGTH_LONG).show();
             Toast.makeText(context, "Tried to copy to: " + "" + context.getExternalFilesDir(null) + File.separator + filename, Toast.LENGTH_LONG).show();
         }
+    }
+
+    // create new folder if not exist and return the filepath
+    public String getStorageDir(String fileName) {
+        //create folder
+        File file = new File(Environment.getExternalStorageDirectory() + "/timeRegBackup/backup");
+        if (!file.mkdirs()) {
+            file.mkdirs();
+            System.out.println("Created the dir: " + file.getAbsolutePath() + File.separator + fileName);
+        }
+        else
+        {
+            System.out.println("could not create dir");
+        }
+        String filePath = file.getAbsolutePath() + File.separator + fileName;
+        return filePath;
     }
 }
