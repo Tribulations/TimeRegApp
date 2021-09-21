@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
+import com.example.timeregtest1.CsvProvider.CsvProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +21,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,16 +42,18 @@ public class BackupDatabase
     private ArrayList<DateReg> allDateRegs = new ArrayList<>();
     private String filenameSuffix = "_dates_backup.txt";
     private String pathToCsvFileExternalStorage = "";
+    private String filePathToTheDbCsvFile ="/data/data/com.example.timeregtest1/databases/companies_database_dates_backup.txt";
+    private String externalFilePath = "/sdcard/Documents/";
 
     private static final String TAG = "BackupDatabase";
     
     public BackupDatabase(Context context)
     {
-        Log.d(TAG, "BackupDatabase: instantiated: databaseFilePath: " + databaseFilePath + "\n" + "pathTOCsvBackupFile: " + pathToCsvBackupFile );
         this.context = context;
         this.companyDatabase = CompanyDatabase.getInstance(context);
         databaseFilePath = companyDatabase.getOpenHelper().getReadableDatabase().getPath();
         pathToCsvBackupFile = databaseFilePath + filenameSuffix;
+        Log.d(TAG, "BackupDatabase: instantiated: databaseFilePath: " + databaseFilePath + "\n" + "pathTOCsvBackupFile: " + pathToCsvBackupFile );
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -136,6 +141,9 @@ public class BackupDatabase
 
 
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        // explicitly use gmail for sending the email
+        //emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
         emailIntent.setType("text/plain");
         /*emailIntent.setType("application/csv");*/
         /*emailIntent.setType("message/rfc822");*/
@@ -143,17 +151,19 @@ public class BackupDatabase
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "The subject of email");
         /*emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");*/
         emailIntent.putExtra(Intent.EXTRA_TEXT, "The message goes here");
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + pathToCsvBackupFile));
 
-        if(Environment.getExternalStorageDirectory().canRead())
-        {
-            System.out.println("Can write to external --------------------------------------------");
-        }
+        //Add the attachment by specifying a reference to our custom ContentProvider
+        //and the specific file of interest
+        /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CsvProvider.AUTHORITY + "/" + pathToCsvBackupFile));*/
+        /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CsvProvider.AUTHORITY + "/" + filePathToTheDbCsvFile));*/
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + CsvProvider.AUTHORITY + "/" + filePathToTheDbCsvFile));
 
+        Log.d(TAG, "sendCsvByEmail: " + context.getApplicationInfo().dataDir);
+        Log.d(TAG, "sendCsvByEmail: " + "content://" + CsvProvider.AUTHORITY + filePathToTheDbCsvFile);
 
         /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + pathToCsvFileExternalStorage));*/
         /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.csv"));*/
-        System.out.println("file://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.txt");
+        System.out.println("content://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.txt");
         emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         context.startActivity(Intent.createChooser(emailIntent, "createChooser used"));
     }
@@ -165,7 +175,10 @@ public class BackupDatabase
         try
         {
             /*File file = new File(context.getExternalFilesDir(null), filename);*/ //Get file location from external source
-            File file = new File(context.getExternalCacheDir(), filename); // trying to write to cacheDIr instead of above
+            /*File file = new File(context.getExternalCacheDir(), filename);*/ // trying to write to cacheDIr instead of above
+            File file = new File(externalFilePath, filename);
+
+            Log.d(TAG, "writeToExternal: external filepath " + externalFilePath + filename);
 
 
             String filePathToNewCreatedDirFile = getStorageDir("companies_database" + filenameSuffix);
@@ -194,7 +207,8 @@ public class BackupDatabase
             pathToCsvFileExternalStorage = context.getExternalCacheDir() + File.separator + filename;
 
             // read the file just created and print the text
-            String contentFromExternalFile = readFile(context.getExternalCacheDir() + File.separator + filename);
+            String contentFromExternalFile = readFile(externalFilePath + filename);
+
             /*String contentFromExternalFile = readFile(context.getExternalFilesDir(null) + File.separator + filename);*/
             System.out.println("The data read from the file copied to external storage: " + contentFromExternalFile);
 
@@ -228,5 +242,22 @@ public class BackupDatabase
         }
         String filePath = file.getAbsolutePath() + File.separator + fileName;
         return filePath;
+    }
+
+    // not used?
+    public static void createCachedFile(Context context, String fileName, String content) throws IOException
+    {
+        File cacheFile = new File(context.getCacheDir() + File.separator
+                + fileName);
+        cacheFile.createNewFile();
+
+        FileOutputStream fos = new FileOutputStream(cacheFile);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF8");
+        PrintWriter pw = new PrintWriter(osw);
+
+        pw.println(content);
+
+        pw.flush();
+        pw.close();
     }
 }

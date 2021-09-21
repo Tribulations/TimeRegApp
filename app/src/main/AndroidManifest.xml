@@ -47,6 +47,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- Needed for the custom send file with email contentprovider -->
+        <provider
+            android:authorities="com.example.timeregtest1.CsvProvider.CsvProvider"
+            android:name=".CsvProvider.CsvProvider"
+            android:enabled="true"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+        </provider>
+        
     </application>
 
 </manifest>
