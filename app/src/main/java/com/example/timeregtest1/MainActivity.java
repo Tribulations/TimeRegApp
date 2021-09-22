@@ -3,16 +3,19 @@ package com.example.timeregtest1;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Database;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Environment;
@@ -30,6 +33,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     public static final String CURRENT_YEAR_KEY = "current_year";
     public static final String CURRENT_MONTH_KEY = "current_month";
     public static final String CURRENT_DAY_KEY = "current_day";
+    private static final int EXT_STORAGE_PERMISSION_CODE = 101;
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -88,8 +93,18 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         break;
                     case R.id.nav_drawer_item2:
-                        Intent temporaryIntent = new Intent(MainActivity.this, TempActivity.class);
-                        startActivity(temporaryIntent);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            try
+                            {
+                                handlePermissions();
+                                BackupDatabase backupDatabase = new BackupDatabase(MainActivity.this);
+                                backupDatabase.copyDatabase();
+                            }
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
                         break;
                     default:
                         break;
@@ -176,6 +191,30 @@ public class MainActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
+    }
+
+    private void handlePermissions()
+    {
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        {
+
+
+            Toast.makeText(this, "Har redan permissions", Toast.LENGTH_SHORT).show();
+
+        }
+        else // request permission
+        {
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE))
+            {
+
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, EXT_STORAGE_PERMISSION_CODE);
+            }
+        }
+
+
     }
 
     /*public static void backupDatabase(Context context, String dbName)

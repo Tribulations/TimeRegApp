@@ -23,47 +23,57 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.os.Environment.DIRECTORY_DOCUMENTS;
+import static android.os.Environment.getDataDirectory;
 import static java.net.Proxy.Type.HTTP;
 
 public class BackupDatabase
 {
     private Context context;
     private CompanyDatabase companyDatabase;
+    /*private String databaseFilePath = "/data/data/com.example.timeregtest1/databases/companies_database";*/
     private String databaseFilePath;
-    private String databaseFilePath2 = "/data/data/com.example.timeregtest1/databases/companies_database";
     private String pathToCsvBackupFile;
-    private ArrayList<DateReg> allDateRegs = new ArrayList<>();
+    private String externalPathToCsvBackupFile;
+   /* private ArrayList<DateReg> allDateRegs = new ArrayList<>();*/
     private String filenameSuffix = "_dates_backup";
-    private String pathToCsvFileExternalStorage = "";
+    /*private String pathToCsvFileExternalStorage = "";
     private String filePathToTheDbCsvFile ="/data/data/com.example.timeregtest1/databases/companies_database_dates_backup.txt";
-    private String externalFilePath = "/sdcard/Documents/";
+    private String externalFilePath = "/sdcard/Documents/"*/;
 
     private static final String TAG = "BackupDatabase";
     
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public BackupDatabase(Context context)
     {
         this.context = context;
         this.companyDatabase = CompanyDatabase.getInstance(context);
         databaseFilePath = companyDatabase.getOpenHelper().getReadableDatabase().getPath();
         pathToCsvBackupFile = databaseFilePath + filenameSuffix;
+        /*externalPathToCsvBackupFile = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString() + filenameSuffix + "_l8sdok";*/
+        externalPathToCsvBackupFile = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOCUMENTS).toString() + File.separator + filenameSuffix + "_l8sdok";
+        /*databaseFilePath2  = context.getFilesDir() + File.separator;*/
         Log.d(TAG, "BackupDatabase: instantiated: databaseFilePath: " + databaseFilePath + "\n" + "pathTOCsvBackupFile: " + pathToCsvBackupFile );
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void copyDatabase() throws IOException
     {
-        Files.copy(new File(databaseFilePath2).toPath(), new File(pathToCsvBackupFile).toPath());
+        /*Files.copy(new File(databaseFilePath).toPath(), new File(pathToCsvBackupFile).toPath());*/
+        Files.copy(new File(databaseFilePath).toPath(), new File(externalPathToCsvBackupFile).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("copyDatabase: copied to: " + externalPathToCsvBackupFile);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    /*@RequiresApi(api = Build.VERSION_CODES.O)
     public void writeDatabaseToCsv() throws IOException
     {
         // write the dateReg table to csv file
@@ -82,19 +92,19 @@ public class BackupDatabase
 
         for(DateReg dateReg : allDateRegs)
         {
-            /*String dbRow = dateReg.getCompanyId() + "," + dateReg.getYear() + "," +
+            *//*String dbRow = dateReg.getCompanyId() + "," + dateReg.getYear() + "," +
                     dateReg.getMonth() + "," + dateReg.getDay() + "," + dateReg.getCompanyName() +
                     "," + dateReg.getTimeWorked() + "," + dateReg.getTimestamp() +
-                    "," + dateReg.getCompanyId() + "," + dateReg.getNote() + "\n";*/
+                    "," + dateReg.getCompanyId() + "," + dateReg.getNote() + "\n";*//*
 
             dbContent += dateReg.getCompanyId() + "," + dateReg.getYear() + "," +
                     String.valueOf(dateReg.getMonth() + 1) + "," + dateReg.getDay() + "," + dateReg.getCompanyName() +
                     "," + dateReg.getTimeWorked() + "," + dateReg.getTimestamp() +
                     "," + dateReg.getCompanyId() + "," + dateReg.getNote() + "\n";
 
-            /*Files.write(Paths.get(pathToCsvBackupFile), dbRow.getBytes(), StandardOpenOption.CREATE);*/
+            *//*Files.write(Paths.get(pathToCsvBackupFile), dbRow.getBytes(), StandardOpenOption.CREATE);*//*
 
-            /*Toast.makeText(context, "Created the file: " + pathToCsvBackupFile, Toast.LENGTH_SHORT).show();*/
+            *//*Toast.makeText(context, "Created the file: " + pathToCsvBackupFile, Toast.LENGTH_SHORT).show();*//*
         }
 
         System.out.println("dbContent: " + dbContent);
@@ -152,24 +162,24 @@ public class BackupDatabase
         // explicitly use gmail for sending the email
         //emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
         emailIntent.setType("text/plain");
-        /*emailIntent.setType("application/csv");*/
-        /*emailIntent.setType("message/rfc822");*/
+        *//*emailIntent.setType("application/csv");*//*
+        *//*emailIntent.setType("message/rfc822");*//*
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"kung_jocke@hotmail.com"}); //
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "The subject of email");
-        /*emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");*/
+        *//*emailIntent.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");*//*
         emailIntent.putExtra(Intent.EXTRA_TEXT, "The message goes here");
 
         //Add the attachment by specifying a reference to our custom ContentProvider
         //and the specific file of interest
-        /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CsvProvider.AUTHORITY + "/" + pathToCsvBackupFile));*/
-        /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CsvProvider.AUTHORITY + "/" + filePathToTheDbCsvFile));*/
+        *//*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CsvProvider.AUTHORITY + "/" + pathToCsvBackupFile));*//*
+        *//*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + CsvProvider.AUTHORITY + "/" + filePathToTheDbCsvFile));*//*
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + CsvProvider.AUTHORITY + "/" + filePathToTheDbCsvFile));
 
         Log.d(TAG, "sendCsvByEmail: " + context.getApplicationInfo().dataDir);
         Log.d(TAG, "sendCsvByEmail: " + "content://" + CsvProvider.AUTHORITY + filePathToTheDbCsvFile);
 
-        /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + pathToCsvFileExternalStorage));*/
-        /*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.csv"));*/
+        *//*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + pathToCsvFileExternalStorage));*//*
+        *//*emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.csv"));*//*
         System.out.println("content://" + context.getExternalFilesDir(null) + File.separator + "companies_database_dates_backup.txt");
         emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
         context.startActivity(Intent.createChooser(emailIntent, "createChooser used"));
@@ -181,8 +191,8 @@ public class BackupDatabase
     {
         try
         {
-            /*File file = new File(context.getExternalFilesDir(null), filename);*/ //Get file location from external source
-            /*File file = new File(context.getExternalCacheDir(), filename);*/ // trying to write to cacheDIr instead of above
+            *//*File file = new File(context.getExternalFilesDir(null), filename);*//* //Get file location from external source
+            *//*File file = new File(context.getExternalCacheDir(), filename);*//* // trying to write to cacheDIr instead of above
             File file = new File(externalFilePath, filename);
 
             Log.d(TAG, "writeToExternal: external filepath " + externalFilePath + filename);
@@ -190,10 +200,10 @@ public class BackupDatabase
 
             String filePathToNewCreatedDirFile = getStorageDir("companies_database" + filenameSuffix);
 
-            /*File file = new File(Environment.getExternalStoragePublicDirectory("DIRECTORY_DOCUMENTS"), filename);*/ // new test again changed from the above
-            /*File file = new File(filePathToNewCreatedDirFile);*/
-            /*InputStream is = new FileInputStream(context.getFilesDir() + File.separator + filename);*/ //get file location from internal
-            /*InputStream is = new FileInputStream(pathToCsvBackupFile);*/ // this line instead from the one above. The above gets the wrong folder /files that doesn't exist in the timeregapp folder
+            *//*File file = new File(Environment.getExternalStoragePublicDirectory("DIRECTORY_DOCUMENTS"), filename);*//* // new test again changed from the above
+            *//*File file = new File(filePathToNewCreatedDirFile);*//*
+            *//*InputStream is = new FileInputStream(context.getFilesDir() + File.separator + filename);*//* //get file location from internal
+            *//*InputStream is = new FileInputStream(pathToCsvBackupFile);*//* // this line instead from the one above. The above gets the wrong folder /files that doesn't exist in the timeregapp folder
             InputStream is = new FileInputStream(Paths.get(pathToCsvBackupFile).toString()); // another test with this line again. changed from the one above obviously
             OutputStream os = new FileOutputStream(file); //Open your OutputStream and pass in the file you want to write to
             byte[] toWrite = new byte[is.available()]; //Init a byte array for handing data transfer
@@ -204,19 +214,19 @@ public class BackupDatabase
             is.close(); //Close it
             os.close(); //Close it
             Log.i("Copying to", "" + context.getExternalFilesDir(null) + File.separator + filename);
-            /*Log.i("Copying from", context.getFilesDir() + File.separator + filename + "");*/
+            *//*Log.i("Copying from", context.getFilesDir() + File.separator + filename + "");*//*
             Log.i("Copying from", Paths.get(pathToCsvBackupFile).toString());
-            /*System.out.println("Copying from: " + context.getFilesDir() + File.separator + filename + "");*/
+            *//*System.out.println("Copying from: " + context.getFilesDir() + File.separator + filename + "");*//*
             System.out.println("Copying from: " + Paths.get(pathToCsvBackupFile).toString());
             System.out.println("Copying to " + context.getExternalFilesDir(null) + File.separator + filename);
 
-            /*pathToCsvFileExternalStorage = context.getExternalFilesDir(null) + File.separator + filename;*/
+            *//*pathToCsvFileExternalStorage = context.getExternalFilesDir(null) + File.separator + filename;*//*
             pathToCsvFileExternalStorage = context.getExternalCacheDir() + File.separator + filename;
 
             // read the file just created and print the text
             String contentFromExternalFile = readFile(externalFilePath + filename);
 
-            /*String contentFromExternalFile = readFile(context.getExternalFilesDir(null) + File.separator + filename);*/
+            *//*String contentFromExternalFile = readFile(context.getExternalFilesDir(null) + File.separator + filename);*//*
             System.out.println("The data read from the file copied to external storage: " + contentFromExternalFile);
 
             System.out.println("-----------------------------------------------------------------\n\n\n");
@@ -266,5 +276,5 @@ public class BackupDatabase
 
         pw.flush();
         pw.close();
-    }
+    }*/
 }

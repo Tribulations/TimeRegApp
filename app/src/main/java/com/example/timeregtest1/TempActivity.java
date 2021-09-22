@@ -1,3 +1,4 @@
+/*
 package com.example.timeregtest1;
 
 import androidx.annotation.NonNull;
@@ -40,15 +41,17 @@ public class TempActivity extends AppCompatActivity
 
         companyDatabase = CompanyDatabase.getInstance(this);
 
-        /*Toast.makeText(getActivity(), companyDatabase.getOpenHelper().getReadableDatabase().getPath(), Toast.LENGTH_LONG).show();
+Toast.makeText(getActivity(), companyDatabase.getOpenHelper().getReadableDatabase().getPath(), Toast.LENGTH_LONG).show();
 
-         *//*String currentDir = System.getProperty("user.dir");
 
-        Toast.makeText(getActivity(), currentDir, Toast.LENGTH_LONG).show();*/
+String currentDir = System.getProperty("user.dir");
+
+        Toast.makeText(getActivity(), currentDir, Toast.LENGTH_LONG).show();
+
 
         backupDatabase = new BackupDatabase(this);
 
-        /*handlePermissions();
+handlePermissions();
 
         try
         {
@@ -81,7 +84,8 @@ public class TempActivity extends AppCompatActivity
         System.out.println("contentFromCsvFile: " + contentFromCsvFile);;
         txt.setText(contentFromCsvFile);
 
-        */
+
+
 
         btnSend.setOnClickListener(new View.OnClickListener()
         {
@@ -89,8 +93,10 @@ public class TempActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                /*handlePermissions();*/
-                /*backupDatabase.sendCsvByEmail();*/
+handlePermissions();
+
+backupDatabase.sendCsvByEmail();
+
                 try
                 {
                     backupDatabase.copyDatabase();
@@ -114,7 +120,10 @@ public class TempActivity extends AppCompatActivity
     {
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
         {
-            /*backupDatabase.sendCsvByEmail();*/
+            */
+/*backupDatabase.sendCsvByEmail();*//*
+
+
             Toast.makeText(this, "Har redan permissions", Toast.LENGTH_SHORT).show();
 
         }
@@ -137,14 +146,15 @@ public class TempActivity extends AppCompatActivity
     {
     }
 
-   /* @Override
+ @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if(requestCode == )
 
-    }*/
+    }
+
 
 
     @Override
@@ -154,3 +164,4 @@ public class TempActivity extends AppCompatActivity
         startActivity(intent);
     }
 }
+*/
