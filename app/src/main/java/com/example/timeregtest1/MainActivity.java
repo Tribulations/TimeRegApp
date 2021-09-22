@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         break;
                     case R.id.nav_drawer_item2:
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             try
                             {
                                 handlePermissions();
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
                             {
                                 e.printStackTrace();
                             }
-                        }
+                        }*/
                         break;
                     default:
                         break;
