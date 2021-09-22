@@ -48,7 +48,7 @@ public class TempActivity extends AppCompatActivity
 
         backupDatabase = new BackupDatabase(this);
 
-        handlePermissions();
+        /*handlePermissions();
 
         try
         {
@@ -81,6 +81,8 @@ public class TempActivity extends AppCompatActivity
         System.out.println("contentFromCsvFile: " + contentFromCsvFile);;
         txt.setText(contentFromCsvFile);
 
+        */
+
         btnSend.setOnClickListener(new View.OnClickListener()
         {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -88,7 +90,15 @@ public class TempActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 /*handlePermissions();*/
-                backupDatabase.sendCsvByEmail();
+                /*backupDatabase.sendCsvByEmail();*/
+                try
+                {
+                    backupDatabase.copyDatabase();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
             }
         });
 

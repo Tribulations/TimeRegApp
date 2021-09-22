@@ -38,9 +38,10 @@ public class BackupDatabase
     private Context context;
     private CompanyDatabase companyDatabase;
     private String databaseFilePath;
+    private String databaseFilePath2 = "/data/data/com.example.timeregtest1/databases/companies_database";
     private String pathToCsvBackupFile;
     private ArrayList<DateReg> allDateRegs = new ArrayList<>();
-    private String filenameSuffix = "_dates_backup.txt";
+    private String filenameSuffix = "_dates_backup";
     private String pathToCsvFileExternalStorage = "";
     private String filePathToTheDbCsvFile ="/data/data/com.example.timeregtest1/databases/companies_database_dates_backup.txt";
     private String externalFilePath = "/sdcard/Documents/";
@@ -54,6 +55,12 @@ public class BackupDatabase
         databaseFilePath = companyDatabase.getOpenHelper().getReadableDatabase().getPath();
         pathToCsvBackupFile = databaseFilePath + filenameSuffix;
         Log.d(TAG, "BackupDatabase: instantiated: databaseFilePath: " + databaseFilePath + "\n" + "pathTOCsvBackupFile: " + pathToCsvBackupFile );
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void copyDatabase() throws IOException
+    {
+        Files.copy(new File(databaseFilePath2).toPath(), new File(pathToCsvBackupFile).toPath());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
