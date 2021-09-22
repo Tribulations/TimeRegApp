@@ -50,8 +50,8 @@
         
         <!-- Needed for the custom send file with email contentprovider -->
         <provider
-            android:authorities="com.example.timeregtest1.CsvProvider.CsvProvider"
             android:name=".CsvProvider.CsvProvider"
+            android:authorities="com.example.timeregtest1.CsvProvider.CsvProvider"
             android:enabled="true"
             android:exported="false"
             android:grantUriPermissions="true" >
