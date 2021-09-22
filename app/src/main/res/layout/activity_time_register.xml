@@ -13,10 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/timeRegParentRelView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="1dp"
         android:text="REDIGERAR POST: "
         android:textColor="#FF0101"
-        android:textSize="10sp"
+        android:textSize="11sp"
+        android:textStyle="bold"
         android:visibility="gone"/>
 
     <RelativeLayout

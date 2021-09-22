@@ -156,12 +156,13 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     {
         isRename = true;
 
-        Toast.makeText(this, "Ändra posten och tryck på lägga till knappen igen", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Ändra posten och tryck på lägga till knappen igen", Toast.LENGTH_LONG).show();
 
         edtTxtCompany.setText(formatCompanyName(companyName));
         edtTxtTime.setText(String.valueOf(timeWorked));
 
         txtWarning.setVisibility(View.VISIBLE);
+        frameLayoutRelView.setVisibility(View.VISIBLE);
         txtWarning.setText("REDIGERAR POST: " + companyName + " " + String.valueOf(timeWorked));
     }
 
