@@ -303,6 +303,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
                     edtTxtCompany.setText("");
                     edtTxtTime.setText("");
+                    edtTxtNote.setText("");
                     if(edtTxtCompany.isFocused())
                     {
                         edtTxtCompany.clearFocus();
@@ -310,6 +311,10 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                     if(edtTxtTime.isFocused())
                     {
                         edtTxtTime.clearFocus();
+                    }
+                    if(edtTxtNote.isFocused())
+                    {
+                        edtTxtNote.clearFocus();
                     }
 
                     chooseCompanyRecView.setVisibility(View.GONE);
