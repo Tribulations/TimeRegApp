@@ -34,6 +34,7 @@ import com.example.timeregtest1.MainActivity;
 import com.example.timeregtest1.R;
 import com.example.timeregtest1.RegisteredDatesActivity;
 import com.example.timeregtest1.TimeRegister.TimeRegisterActivity;
+import com.example.timeregtest1.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,12 +52,6 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
     @Override
     public void onCompanyNameClicked(String companyName, int id)
     {
-        /*CompanyInfoFragment companyInfoFragment = new CompanyInfoFragment();
-        companyInfoFragment.setArguments(bundle);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, companyInfoFragment);
-        transaction.commit();*/
-
         Intent intent = new Intent(CompanyRegisterActivity.this, CompanyInfoActivity.class);
         intent.putExtra(COMPANY_NAME_KEY, companyName);
         intent.putExtra(COMPANY_ID_KEY, id);
@@ -186,6 +181,7 @@ public class CompanyRegisterActivity extends AppCompatActivity implements Compan
 
                 if(!showingHelp)
                 {
+                    Utils.hideKeyboard(CompanyRegisterActivity.this);
                     snackbar.show();
                     btnHelp.setText("Göm");
                     showingHelp = true;

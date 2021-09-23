@@ -25,6 +25,7 @@ import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.EditDialog;
 import com.example.timeregtest1.MainActivity;
 import com.example.timeregtest1.R;
+import com.example.timeregtest1.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,7 +44,7 @@ public class CompanyInfoActivity extends AppCompatActivity implements EditDialog
         }
         else
         {
-
+            Utils.hideKeyboard(this);
             AlertDialog.Builder newNameDialog = new AlertDialog.Builder(CompanyInfoActivity.this)
                     .setTitle("Byt namn?")
                     .setPositiveButton("Ja", new DialogInterface.OnClickListener()
@@ -165,10 +166,9 @@ public class CompanyInfoActivity extends AppCompatActivity implements EditDialog
             @Override
             public void onClick(View v)
             {
-
-
                 if(!showingHelp)
                 {
+                    Utils.hideKeyboard(CompanyInfoActivity.this);
                     snackbar.show();
                     btnHelp.setText("Göm");
                     showingHelp = true;

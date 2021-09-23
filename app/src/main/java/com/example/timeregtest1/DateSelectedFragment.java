@@ -80,7 +80,7 @@ public class DateSelectedFragment extends Fragment
             {
                 ArrayList<DateReg> newDateRegs = (ArrayList<DateReg>) dateRegs;
 
-                if(newDateRegs != null && newDateRegs.size() > 0)
+                if(newDateRegs != null)
                 {
                     dateRegsAdapter.setAllDateRegs(newDateRegs);
                 }
@@ -91,7 +91,7 @@ public class DateSelectedFragment extends Fragment
             }
         });
 
-        if(allDateRegs != null && allDateRegs.size() > 0)
+        if(allDateRegs != null)
         {
             dateRegsAdapter.setAllDateRegs(allDateRegs);
         }

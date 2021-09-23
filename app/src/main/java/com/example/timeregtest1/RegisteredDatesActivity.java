@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -23,6 +25,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -481,6 +484,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
                 if(!showingHelp)
                 {
+                    Utils.hideKeyboard(RegisteredDatesActivity.this);
                     snackbar.show();
                     btnHelp.setText("Göm");
                     showingHelp = true;
@@ -633,13 +637,12 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 SystemClock.sleep(10);
             }
 
-            if(searchedCompanies != null && searchedCompanies.size() > 0)
+            if(searchedCompanies != null)
             {
                 companyAdapter.setAllCompanies(searchedCompanies);
             }
             else
             {
-                // this doesn't show
                 Toast.makeText(this, "Inget företag med det namnet hittades", Toast.LENGTH_SHORT).show();
             }
         }
