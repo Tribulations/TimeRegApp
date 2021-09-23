@@ -1,40 +1,27 @@
 package com.example.timeregtest1.TimeRegister;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Database;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Display;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -42,7 +29,6 @@ import android.widget.Toast;
 
 import com.example.timeregtest1.CompanyAdapter;
 import com.example.timeregtest1.CompanyDatabase.Company;
-import com.example.timeregtest1.CompanyDatabase.CompanyDao;
 import com.example.timeregtest1.CompanyDatabase.CompanyDatabase;
 import com.example.timeregtest1.CompanyDatabase.DateReg;
 import com.example.timeregtest1.CompanyRegister.CompanyRegisterActivity;
@@ -53,7 +39,6 @@ import com.example.timeregtest1.R;
 import com.example.timeregtest1.selectedDate.DateRegsAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -63,7 +48,6 @@ import java.util.List;
 import static com.example.timeregtest1.MainActivity.CURRENT_DAY_KEY;
 import static com.example.timeregtest1.MainActivity.CURRENT_MONTH_KEY;
 import static com.example.timeregtest1.MainActivity.CURRENT_YEAR_KEY;
-import static com.example.timeregtest1.selectedDate.DateSelectedActivity.SELECTED_DATE_KEY;
 
 // trying to implement an interface to use callback to let this activity be notified when an company name in the recview has been clicked
 
@@ -72,19 +56,19 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     private static final String TAG = "TimeRegisterActivity";
 
     // get the id of the companyname tha was clicked
-    private int firstCompanyId = -1, secondCompanyId = -1, thirdCompanyId = -1;
+    /*private int firstCompanyId = -1, secondCompanyId = -1, thirdCompanyId = -1;*/
     private int companyId = -1, dateRegId = -1;
     private float timeWorked = 0f;
     private String companyName = "";
     private int y = 0, m = 0, d = 0;
-    private Company companyById = new Company("default");
+    private Company companyToSearchById = new Company("default");
 
     // used to keep track of when the user wants to update or delete a datereg post
     private boolean isRename = false;
 
     private ScrollView timeRegScrollView;
-    private RelativeLayout timeRegParentRelLayout, timeRegRelLayout, firstTimeRegRelLayout, secondTimeRegRelLayout;
-    private EditText edtTxtCompany, edtTxtTime, edtTxtNote, secondEdtTxtCompany, thirdEdtTxtCompany;
+    private RelativeLayout timeRegParentRelLayout, timeRegRelLayout, firstTimeRegRelLayout;
+    private EditText edtTxtCompany, edtTxtTime, edtTxtNote;
     private RecyclerView chooseCompanyRecView;
     private ImageView btnAddInputField;
     private TextView txtSelectedDate, txtWarning;
@@ -112,29 +96,11 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
     @Override
     public void onCompanyNameClicked(String companyName , int id)
     {
-        if(edtTxtCompany.isFocused())
-        {
-            edtTxtCompany.setText(formatCompanyName(companyName));
-            edtTxtCompany.clearFocus();
-            chooseCompanyRecView.setVisibility(View.GONE);
-            frameLayoutRelView.setVisibility(View.VISIBLE);
-            firstCompanyId = id;
-            companyId = id;
-        }
-        else if(secondEdtTxtCompany.isFocused())
-        {
-            secondEdtTxtCompany.setText(formatCompanyName(companyName));
-            secondEdtTxtCompany.clearFocus();
-            chooseCompanyRecView.setVisibility(View.GONE);
-            secondCompanyId = id;
-        }
-        else if(thirdEdtTxtCompany.isFocused())
-        {
-            thirdEdtTxtCompany.setText(formatCompanyName(companyName));
-            thirdEdtTxtCompany.clearFocus();
-            chooseCompanyRecView.setVisibility(View.GONE);
-            thirdCompanyId = id;
-        }
+        edtTxtCompany.setText(formatCompanyName(companyName));
+        edtTxtCompany.clearFocus();
+        chooseCompanyRecView.setVisibility(View.GONE);
+        frameLayoutRelView.setVisibility(View.VISIBLE);
+        companyId = id;
     }
 
     @Override
@@ -222,67 +188,10 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
                 }
                 break;
-            /*case R.id.secondEdtTxtCompany:
-                if(secondEdtTxtCompany.getText().toString().equals(""))
-                {
-                    //allCompanies = (ArrayList<Company>) CompanyDatabase.getInstance(TimeRegisterActivity.this).companyDao().getAllCompanies();
 
-                    Runnable g = new GetAllCompaniesThread();
-                    Thread thread = new Thread(g);
-                    thread.start();
-
-                    while(thread.isAlive())
-                    {
-                        SystemClock.sleep(10);
-                    }
-
-                    companyAdapter.setAllCompanies(allCompanies);
-                    chooseCompanyRecView.setVisibility(View.VISIBLE);
-                }
-                break;
-            case R.id.secondEdtTxtTime:
-                if(secondEdtTxtCompany.getText().toString().equals(""))
-                {
-                    //allCompanies = (ArrayList<Company>) CompanyDatabase.getInstance(TimeRegisterActivity.this).companyDao().getAllCompanies();
-
-                    Runnable g = new GetAllCompaniesThread();
-                    Thread thread = new Thread(g);
-                    thread.start();
-
-                    while(thread.isAlive())
-                    {
-                        SystemClock.sleep(10);
-                    }
-
-                    companyAdapter.setAllCompanies(allCompanies);
-                    chooseCompanyRecView.setVisibility(View.VISIBLE);
-                }
-                break;
-            case R.id.thirdEdtTxtCompany:
-                if(thirdEdtTxtCompany.getText().toString().equals(""))
-                {
-                    //allCompanies = (ArrayList<Company>) CompanyDatabase.getInstance(TimeRegisterActivity.this).companyDao().getAllCompanies();
-
-                    Runnable g = new GetAllCompaniesThread();
-                    Thread thread = new Thread(g);
-                    thread.start();
-
-                    while(thread.isAlive())
-                    {
-                        SystemClock.sleep(10);
-                    }
-
-                    companyAdapter.setAllCompanies(allCompanies);
-                    chooseCompanyRecView.setVisibility(View.VISIBLE);
-                }
-                break;*/
-            case R.id.btnAddInputField:// use this as save to database button?
-                // check if the inputted companies exist
-
+            case R.id.btnAddInputField:
                 if(isRename)
                 {
-
-
                     Thread getCompanyThread = new Thread(new GetCompanyByIdThread(companyId));
                     getCompanyThread.start();
 
@@ -291,7 +200,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                         SystemClock.sleep(10);
                     }
 
-                    Thread t = new Thread(new UpdateDateRegThread(companyById.getCompanyName(), Float.valueOf(edtTxtTime.getText().toString()), dateRegId ,companyId));
+                    Thread t = new Thread(new UpdateDateRegThread(companyToSearchById.getCompanyName(), Float.valueOf(edtTxtTime.getText().toString()), dateRegId ,companyId));
                     t.start();
 
                     while(t.isAlive())
@@ -301,7 +210,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
                     Toast.makeText(this, "Posten ändrad", Toast.LENGTH_SHORT).show();
 
-                    edtTxtCompany.setText("");
+                   /* edtTxtCompany.setText("");
                     edtTxtTime.setText("");
                     edtTxtNote.setText("");
                     if(edtTxtCompany.isFocused())
@@ -317,119 +226,34 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                         edtTxtNote.clearFocus();
                     }
 
+
                     chooseCompanyRecView.setVisibility(View.GONE);
-                    frameLayoutRelView.setVisibility(View.VISIBLE);
+                    frameLayoutRelView.setVisibility(View.VISIBLE);*/
+
+                    afterRegistration();
                     txtWarning.setVisibility(View.GONE);
 
                     isRename = false;
                 }
                 else
                 {
-                    if(edtTxtCompany.getText().toString().equals("") || edtTxtTime.getText().toString().equals(""))
+                    if( !( edtTxtTime.getText().toString().equals("") ) && companyId != -1) // if no company has been clicked the companyId = -1
                     {
-                        Toast.makeText(this, "Fyll i företagets namn och tid innan du försöker lägga till en post!", Toast.LENGTH_SHORT).show();
+                        addDateReg();
+                        Toast.makeText(this, "Tid tillagd!", Toast.LENGTH_SHORT).show();
+                        afterRegistration();
+                    }
+                    else if (edtTxtCompany.getText().toString().equals("") || edtTxtTime.getText().toString().equals(""))
+                    {
+                        Toast.makeText(TimeRegisterActivity.this, "Fyll i företagets namn och tid innan du försöker lägga till en post!", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
-                        ArrayList<String> companyNames = new ArrayList<>();
-                        ArrayList<Float> companyHours = new ArrayList<>();
-                        companyNames.add(edtTxtCompany.getText().toString());
-                        companyHours.add(Float.valueOf(edtTxtTime.getText().toString()));
-
-
-                        // ugly so change later
-                        ArrayList<Integer> ids = new ArrayList<>();
-                        if(firstCompanyId != -1)
-                        {
-                            ids.add(firstCompanyId);
-                        }
-
-                        int i = 0;
-                        for(String name : companyNames)
-                        {
-
-                            if(!name.equals(""))
-                            {
-                                Thread t2 = new Thread(new GetCompanyByIdThread(ids.get(i)));
-                                t2.start();
-
-                                while(t2.isAlive())
-                                {
-                                    SystemClock.sleep(10);
-                                }
-
-                                Calendar currentDate = Calendar.getInstance();
-                                currentDate.set(y, m, d, 12, 0, 0); // the month is counted from 0
-
-                                /*String note = "-";
-                                if(!edtTxtNote.getText().toString().equals(""))
-                                {
-                                    note = edtTxtNote.getText().toString();
-                                }*/
-
-                                DateReg dateReg = new DateReg(y, m, d, companyById.getCompanyName(), companyHours.get(i), currentDate.getTimeInMillis(), companyId, edtTxtNote.getText().toString());
-
-                                // add company to database
-                                Thread t3 = new Thread(new InsertDateRegThread(dateReg));
-                                t3.start();
-
-                                // shouldnt need to wait like this but doing it know for safety?
-                                while(t3.isAlive())
-                                {
-                                    SystemClock.sleep(10);
-                                }
-
-                                i++;
-                            }
-                        }
-
-                        Toast.makeText(this, "Tid tillagd!", Toast.LENGTH_SHORT).show();
-
-                        // clear the fields
-                        edtTxtCompany.setText("");
-                        edtTxtTime.setText("");
-                        edtTxtNote.setText("");
-
-                        if (edtTxtCompany.isFocused())
-                        {
-                            edtTxtCompany.clearFocus();
-                        }
-                        if(edtTxtTime.isFocused())
-                        {
-                            edtTxtTime.clearFocus();
-                        }
-                        if(edtTxtNote.isFocused())
-                        {
-                            edtTxtNote.clearFocus();
-                        }
-
-                        frameLayoutRelView.setVisibility(View.VISIBLE);
-                        chooseCompanyRecView.setVisibility(View.GONE);
-
+                        Toast.makeText(this, "Har du valt ett företag genom att klicka på det i listan innan du försöker lägga till en nya post?", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 break;
-            /*case R.id.secondBtnNotAccepted:
-                if(constraintLayout.getVisibility() == View.GONE && secondBtnNotAccepted.getVisibility() == View.VISIBLE)
-                {
-                    constraintLayout.setVisibility(View.VISIBLE);
-                }
-                secondBtnNotAccepted.setVisibility(View.GONE);
-                secondBtnAccepted.setVisibility(View.VISIBLE);
-                break;
-            case R.id.secondBtnAccepted:
-                secondBtnNotAccepted.setVisibility(View.VISIBLE);
-                secondBtnAccepted.setVisibility(View.GONE);
-                break;
-            case R.id.thirdBtnNotAccepted:
-                thirdBtnNotAccepted.setVisibility(View.GONE);
-                thirdBtnAccepted.setVisibility(View.VISIBLE);
-                break;
-            case R.id.thirdBtnAccepted:
-                thirdBtnNotAccepted.setVisibility(View.VISIBLE);
-                thirdBtnAccepted.setVisibility(View.GONE);
-                break;*/
             default:
                 break;
         }
@@ -650,6 +474,57 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
         return name;
     }
 
+    private void addDateReg()
+    {
+        Thread getSelectedCompany = new Thread(new GetCompanyByIdThread(companyId));
+        getSelectedCompany.start();
+
+        while(getSelectedCompany.isAlive())
+        {
+            SystemClock.sleep(10);
+        }
+
+        Calendar currentDate = Calendar.getInstance();
+        currentDate.set(y, m, d, 12, 0, 0); // the month is counted from 0
+
+        DateReg dateReg = new DateReg(y, m, d, companyToSearchById.getCompanyName(), Float.valueOf(edtTxtTime.getText().toString()), currentDate.getTimeInMillis(), companyId, edtTxtNote.getText().toString());
+
+        // add company to database
+        Thread addCompanyToDb = new Thread(new InsertDateRegThread(dateReg));
+        addCompanyToDb.start();
+
+        // shouldnt need to wait like this but doing it here for safety?
+        while(addCompanyToDb.isAlive())
+        {
+            SystemClock.sleep(10);
+        }
+    }
+
+    // procedure after renaming or adding a registration
+    private void afterRegistration()
+    {
+        // clear the fields
+        edtTxtCompany.setText("");
+        edtTxtTime.setText("");
+        edtTxtNote.setText("");
+
+        if (edtTxtCompany.isFocused())
+        {
+            edtTxtCompany.clearFocus();
+        }
+        if(edtTxtTime.isFocused())
+        {
+            edtTxtTime.clearFocus();
+        }
+        if(edtTxtNote.isFocused())
+        {
+            edtTxtNote.clearFocus();
+        }
+
+        frameLayoutRelView.setVisibility(View.VISIBLE);
+        chooseCompanyRecView.setVisibility(View.GONE);
+    }
+
     @Override
     public void onBackPressed()
     {
@@ -754,9 +629,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
         public void run()
         {
             Log.d(TAG, "run: ");
-            //super.run();
-
-            companyById = CompanyDatabase.getInstance(TimeRegisterActivity.this).companyDao().getCompanyById(id);
+            companyToSearchById = CompanyDatabase.getInstance(TimeRegisterActivity.this).companyDao().getCompanyById(id);
         }
 
     }

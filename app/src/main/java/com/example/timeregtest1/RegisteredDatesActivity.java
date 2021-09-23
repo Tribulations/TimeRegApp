@@ -669,6 +669,13 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         }
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(RegisteredDatesActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     public class GetAllDateRegsInPeriodThread implements Runnable
     {
         private static final String TAG = "GetAllDateRegsInPeriodThread";
