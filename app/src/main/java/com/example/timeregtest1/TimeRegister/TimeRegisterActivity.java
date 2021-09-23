@@ -182,7 +182,16 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                         SystemClock.sleep(10);
                     }
 
-                    companyAdapter.setAllCompanies(allCompanies);
+
+                    if(allCompanies != null)
+                    {
+                        companyAdapter.setAllCompanies(allCompanies);
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Kunde inte ladda listan med företag prova att gå bakåt och sen tillbaka till det här fönstret", Toast.LENGTH_SHORT).show();
+                    }
+
                     chooseCompanyRecView.setVisibility(View.VISIBLE);
                     frameLayoutRelView.setVisibility(View.GONE);
 
@@ -232,7 +241,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                         Toast.makeText(this, "Har du valt ett företag genom att klicka på det i listan innan du försöker lägga till en nya post?", Toast.LENGTH_SHORT).show();
                     }
                 }
-                
+
                 break;
             default:
                 break;
@@ -280,8 +289,15 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
             @Override
             public void onChanged(List<Company> companies)
             {
+                if(allCompanies != null)
+                {
+                    companyAdapter.setAllCompanies(allCompanies);
+                }
+                else
+                {
+                    Toast.makeText(TimeRegisterActivity.this, "Kunde inte ladda listan med företag prova att gå bakåt och sen tillbaka till det här fönstret", Toast.LENGTH_SHORT).show();
+                }
 
-                companyAdapter.setAllCompanies(allCompanies);
             }
         });
 

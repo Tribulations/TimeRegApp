@@ -131,7 +131,15 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 Thread thread = new Thread(new GetAllCompaniesThread());
                 thread.start();
 
-                companyAdapter.setAllCompanies(allCompanies);
+                if(allCompanies != null && allCompanies.size() > 0)
+                {
+                    companyAdapter.setAllCompanies(allCompanies);
+                }
+                else
+                {
+                    Toast.makeText(RegisteredDatesActivity.this, "Kunde inte ladda listan med företag. Försök igen.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -625,7 +633,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
                 SystemClock.sleep(10);
             }
 
-            if(searchedCompanies != null)
+            if(searchedCompanies != null && searchedCompanies.size() > 0)
             {
                 companyAdapter.setAllCompanies(searchedCompanies);
             }

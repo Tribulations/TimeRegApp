@@ -46,22 +46,11 @@ public class MainFragment extends Fragment
     private CalendarView calendarView;
     private BottomNavigationView bottomNavigationView;
 
-    /*private FrameLayout mainActivityFragment;*/
-
-    /*private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private MaterialToolbar toolbar;*/
-
-    /*private ArrayList<DateReg> allDateRegs = new ArrayList<>();*/
-
     private int y = 0, m = 0, d = 0;
 
     private Bundle bundle = new Bundle();
 
     private Calendar today = Calendar.getInstance();
-
-    CompanyDatabase companyDatabase;
-    BackupDatabase backupDatabase;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable

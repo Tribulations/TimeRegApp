@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,12 +34,10 @@ public class DateSelectedFragment extends Fragment
 {
     private static final String TAG = "DateSelectedFragment";
 
-
     private ArrayList<DateReg> allDateRegs = new ArrayList<>();
     private LiveData<List<DateReg>> allDateRegsLiveData;
     private RecyclerView dateRegRecView;
     private DateRegsAdapter dateRegsAdapter;
-    //private TextView txtSelectedDate;
 
     int y = 0, m = 0, d = 0;
 
@@ -65,20 +64,10 @@ public class DateSelectedFragment extends Fragment
         }
 
         Thread t = new Thread(new GetAllDateRegsThread(y, m, d));
-        /*t.start();
-        while (t.isAlive())
-        {
-            SystemClock.sleep(10);
-        }*/
-
-
-
 
         dateRegsAdapter = new DateRegsAdapter(getActivity());
         dateRegRecView.setAdapter(dateRegsAdapter);
         dateRegRecView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-
-
 
         allDateRegsLiveData = CompanyDatabase.getInstance(getActivity()).dateRegDao().getSelectedDateLiveData(y, m, d);
         /*int finalY = y;
@@ -89,17 +78,27 @@ public class DateSelectedFragment extends Fragment
             @Override
             public void onChanged(List<DateReg> dateRegs)
             {
-                /*Thread thread = new Thread(new GetAllDateRegsThread(finalY, finalM, finalD));
-                thread.start();*/
-
                 ArrayList<DateReg> newDateRegs = (ArrayList<DateReg>) dateRegs;
 
-                dateRegsAdapter.setAllDateRegs(newDateRegs);
+                if(newDateRegs != null && newDateRegs.size() > 0)
+                {
+                    dateRegsAdapter.setAllDateRegs(newDateRegs);
+                }
+                else
+                {
+                    Toast.makeText(getActivity(), "Kunde inte ladda listan med registrerade tider. Försök igen.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-
-        dateRegsAdapter.setAllDateRegs(allDateRegs);
+        if(allDateRegs != null && allDateRegs.size() > 0)
+        {
+            dateRegsAdapter.setAllDateRegs(allDateRegs);
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Kunde inte ladda listan med registrerade tider. Försök igen.", Toast.LENGTH_SHORT).show();
+        }
 
         return view;
     }
@@ -107,9 +106,7 @@ public class DateSelectedFragment extends Fragment
     private void initViews(View view)
     {
         dateRegRecView = view.findViewById(R.id.dateRegRecView);
-        //txtSelectedDate = view.findViewById(R.id.txtSelectedDateDSA);
     }
-
 
     public class GetAllDateRegsThread implements Runnable
     {
@@ -129,8 +126,6 @@ public class DateSelectedFragment extends Fragment
         public void run()
         {
             Log.d(TAG, "run: called");
-            //super.run();
-
             allDateRegs = (ArrayList<DateReg>) CompanyDatabase.getInstance(getActivity()).dateRegDao().getSelectedDatesData(y, m, d);
         }
 
