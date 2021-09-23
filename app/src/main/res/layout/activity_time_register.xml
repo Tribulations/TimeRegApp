@@ -40,7 +40,7 @@
 
                 <EditText
                     android:id="@+id/edtTxtCompany"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
@@ -51,7 +51,7 @@
 
                 <EditText
                     android:id="@+id/edtTxtTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="97dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"

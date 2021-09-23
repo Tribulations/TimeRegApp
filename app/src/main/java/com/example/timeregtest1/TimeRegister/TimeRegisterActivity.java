@@ -210,33 +210,13 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
 
                     Toast.makeText(this, "Posten ändrad", Toast.LENGTH_SHORT).show();
 
-                   /* edtTxtCompany.setText("");
-                    edtTxtTime.setText("");
-                    edtTxtNote.setText("");
-                    if(edtTxtCompany.isFocused())
-                    {
-                        edtTxtCompany.clearFocus();
-                    }
-                    if(edtTxtTime.isFocused())
-                    {
-                        edtTxtTime.clearFocus();
-                    }
-                    if(edtTxtNote.isFocused())
-                    {
-                        edtTxtNote.clearFocus();
-                    }
-
-
-                    chooseCompanyRecView.setVisibility(View.GONE);
-                    frameLayoutRelView.setVisibility(View.VISIBLE);*/
-
                     afterRegistration();
                     txtWarning.setVisibility(View.GONE);
 
                     isRename = false;
                 }
                 else
-                {
+                {   // add new registration
                     if( !( edtTxtTime.getText().toString().equals("") ) && companyId != -1) // if no company has been clicked the companyId = -1
                     {
                         addDateReg();
@@ -252,7 +232,7 @@ public class TimeRegisterActivity extends AppCompatActivity implements CompanyAd
                         Toast.makeText(this, "Har du valt ett företag genom att klicka på det i listan innan du försöker lägga till en nya post?", Toast.LENGTH_SHORT).show();
                     }
                 }
-
+                
                 break;
             default:
                 break;
