@@ -2,7 +2,6 @@ package com.example.timeregtest1.CompanyDatabase;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,7 @@ public abstract class CompanyDatabase extends RoomDatabase
     public abstract CompanyDao companyDao();
     public abstract DateRegDao dateRegDao();
 
-    // singleton patter have only one instance of the database
+    // singleton pattern have only one instance of the database
     private static CompanyDatabase instance;
     public static synchronized CompanyDatabase getInstance(Context context)
     {
@@ -40,8 +39,8 @@ public abstract class CompanyDatabase extends RoomDatabase
         return instance;
     }
 
-    // this callback is automaticly called the first time the db is created?
-    private static RoomDatabase.Callback initialCallback = new RoomDatabase.Callback()
+    // this callback is automatically called the first time the db is created?
+    private static final RoomDatabase.Callback initialCallback = new RoomDatabase.Callback()
     {
         
         @Override
@@ -74,10 +73,10 @@ public abstract class CompanyDatabase extends RoomDatabase
     {
         private static final String TAG = "InitialAsyncTask";
         
-        private CompanyDao companyDao;
-        private DateRegDao dateRegDao;
-        private ArrayList<Company> testCompanies = new ArrayList<>();
-        private ArrayList<DateReg> testDates = new ArrayList<>();
+        private final CompanyDao companyDao;
+        private final DateRegDao dateRegDao;
+        private final ArrayList<Company> testCompanies = new ArrayList<>();
+        private final ArrayList<DateReg> testDates = new ArrayList<>();
 
         // init db
         public InitialAsyncTask(CompanyDatabase db)
@@ -99,13 +98,6 @@ public abstract class CompanyDatabase extends RoomDatabase
             {
                 companyDao.insert(company);
             }
-
-            /*initTestDates();*/
-
-            /*for(DateReg dateReg : testDates)
-            {
-                dateRegDao.insert(dateReg);
-            }*/
 
             return null;
         }
@@ -203,24 +195,6 @@ public abstract class CompanyDatabase extends RoomDatabase
             testCompanies.add(to);
             testCompanies.add(u);
             testCompanies.add(ke);
-
         }
-
-        /*private void initTestDates()
-        {
-            DateReg a = new DateReg(2021, 8, 12, "DG", 2, 1628726400000L);
-            DateReg b = new DateReg(2021, 8, 12, "RST", 0.5f, 1628726400000L);
-            DateReg c = new DateReg(2021, 8, 12, "CDH", 0.84f, 1628726400000L);
-            DateReg d = new DateReg(2021, 8, 12, "LB", 3.5f, 1628726400000L);
-            DateReg e = new DateReg(2021, 8, 12, "Limek", 1f, 1628726400000L);
-            DateReg f = new DateReg(2021, 8, 12, "Lilléns", 12.34f, 1628726400000L);
-
-            testDates.add(a);
-            testDates.add(b);
-            testDates.add(c);
-            testDates.add(d);
-            testDates.add(e);
-            testDates.add(f);
-        }*/
     }
 }

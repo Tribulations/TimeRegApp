@@ -1,6 +1,5 @@
 package com.example.timeregtest1.CompanyDatabase;
 
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;

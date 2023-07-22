@@ -8,7 +8,6 @@ import androidx.room.Query;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.List;
 
-
 @Dao
 public interface CompanyDao
 {
@@ -26,7 +25,7 @@ public interface CompanyDao
 
     // asyncronous method?
     @Query("SELECT * FROM ftg")
-    public ListenableFuture<List<Company>> getAllCompaniesAsync();
+    ListenableFuture<List<Company>> getAllCompaniesAsync();
 
     @Query("SELECT * FROM ftg ORDER BY ftg_namn")
     LiveData<List<Company>> getAllCompaniesLiveData();
@@ -42,6 +41,4 @@ public interface CompanyDao
 
     @Query("UPDATE ftg SET ftg_namn = :newName WHERE id = :id")
     void updateCompanyName(String newName, int id);
-
-
 }
