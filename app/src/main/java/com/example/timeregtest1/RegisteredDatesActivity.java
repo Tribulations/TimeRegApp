@@ -64,7 +64,7 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     private ArrayList<Company> searchedCompanies;
 
-    private Button btnSelectPeriod, btnHelp;
+    private Button btnSelectPeriod, btnHelp, btnCSV;
     private RecyclerView dateRegsRecView, chooseCompanyRecView;
 
     private EditText edtTxtNameToSearch;
@@ -87,6 +87,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
     private boolean showingHelp = false;
 
     private Snackbar snackbar;
+    final String TO_EMAIL = "lotta_wahrolen@outlook.com";
+    final String EMAIL_SUBJECT = "L8s Dok genererad csv fil";
 
     @Override
     public void onRegDateClicked(String regDateNote)
@@ -498,6 +500,25 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
             }
         });
+
+        btnCSV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Send email with csv data when pressing the CSV button.
+                String csvContent = "";
+                for (DateReg dateReg : allDateRegs) {
+                    String day = dateReg.getDay() > 9
+                            ? String.valueOf(dateReg.getDay()) : "0" + dateReg.getDay();
+                    String month = dateReg.getMonth() > 9
+                            ? String.valueOf(dateReg.getMonth()) : "0" + dateReg.getMonth();
+                    String date = String.format("%s-%s-%s", dateReg.getYear(), month, day);
+                    csvContent += String.format(
+                            "%s,%s,%s,%s%n", date, dateReg.getCompanyName(),
+                            dateReg.getTimeWorked(), dateReg.getNote());
+                }
+                sendEmailWithContent(csvContent);
+            }
+        });
         
         dateRegsAdapter = new RegDatesAdapter(this);
         dateRegsRecView.setAdapter(dateRegsAdapter);
@@ -547,6 +568,8 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
         btnSelectPeriod = findViewById(R.id.btnSelectPeriod);
 
         btnHelp = findViewById(R.id.btnHelp);
+
+        btnCSV = findViewById(R.id.btnCsv);
 
         noteWindowLayout = findViewById(R.id.noteWindowLayout);
 
@@ -767,4 +790,20 @@ public class RegisteredDatesActivity extends AppCompatActivity implements Compan
 
     }
 
+    private void sendEmailWithContent(String content) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{TO_EMAIL});
+        intent.putExtra(Intent.EXTRA_SUBJECT, EMAIL_SUBJECT);
+        intent.putExtra(Intent.EXTRA_TEXT, content);
+
+        // Check if there is an email client available to handle the intent
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(intent, "Skicka csv"));
+        } else {
+            // Handle the case where no email client is available
+            // todo show a toast message satting a email cliet has o be installed
+            Toast.makeText(this, "Du har ingen email app fixad", Toast.LENGTH_LONG).show();
+        }
+    }
 }
